@@ -1,0 +1,60 @@
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+LISTA_SIMPLES.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_04
+{
+    public partial class Lista_simples : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+    
+            string connetionString;
+            SqlConnection con;
+            // veja a imagem abaixo para saber onde vai buscar o caminho da conexão
+            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+            // Response.Write("Ligado com sucesso!");
+            // a linha acima utilizo apenas para ver se a conexão é feita com sucesso
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = "<h1>Listagem de livros</h1>" +
+                "<table border= '1'>" +
+                "<tr><th>Id</th><th>Nome</th><th>Num. páginas</th><th>Tamanho</th>" +
+                "</tr>";
+            sql = "Select Id, nome, n_paginas, tamanho from livro";
+
+            command = new SqlCommand(sql, con);
+            int numero_registos = 0;
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                Output = Output + "<tr><td>" + dataReader.GetValue(0) + "</td>" +
+                    "<td>" + dataReader.GetValue(1) + "</td>" +
+                    "<td>" + dataReader.GetValue(2) + "</td>" +
+                    "<td>" + dataReader.GetValue(3) + "</td></tr>";
+                numero_registos++;
+            }
+            Output = Output + "<tr><th colspan='4'>Numero de registo -->"
+                + numero_registos + "</th></tr>";
+            Output = Output + "</table>";
+            Response.Write(Output);
+            dataReader.Close();
+            con.Close();
+
+        }
+
+    }
+
+}   
