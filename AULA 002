@@ -17,7 +17,540 @@ CREATE TABLE [dbo].[motos] (
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
 
-LISTA_SIMPLES.ASPX.CS
+SITE_MASTER.ASPX.CS
+
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Ex_05.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="pt">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - Meu aplicativo ASP.NET</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <footer>
+                <p>&copy; <%: DateTime.Now.Year %> - HOME MOTORS ASP.NET</p>
+            </footer>
+        </div>
+    </form>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+    </asp:PlaceHolder>
+</body>
+</html>
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+INDEX.ASPX
+
+<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="Ex_05._Default" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <div style="position: relative; width: 100%; height: 100%;">
+        <asp:Button ID="bt_inserir" runat="server" Text="INSERIR" OnClick="bt_inserir_click" style="position: absolute; bottom: 697px; left: 12px; height: 38px; width: 178px; right: 1173px;" />
+        <asp:Button ID="bt_listar" runat="server" Text="LISTAR" OnClick="bt_listar_click" style="position: absolute; bottom: 747px; left: 13px; height: 38px; width: 178px;" />
+        <asp:Button ID="bt_alt_el" runat="server" Text="ALTERAR" OnClick="bt_alt_el_click" style="position: absolute; bottom: 646px; left: 11px; height: 38px; width: 178px;" />
+        <img src="https://wallpaperaccess.com/full/853873.jpg" alt="bgimage" style="width: 100%; height: 100%;" />
+    </div>
+</asp:Content>
+
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+INDEX.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+
+namespace Ex_05
+{
+    public partial class _Default : Page
+
+    {
+
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void bt_inserir_click(object sender, EventArgs e)
+        {
+
+            Server.Transfer("Inserir.aspx"); // ir para a página listar...
+
+        }
+
+        protected void bt_listar_click(object sender, EventArgs e)
+        {
+
+            Server.Transfer("Listar.aspx"); // ir para a página listar...
+
+        }
+
+        protected void bt_alt_el_click(object sender, EventArgs e)
+        {
+
+            Server.Transfer("Editar.aspx"); // ir para a página listar...
+
+        }
+
+    }
+
+}
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+LISTAR.ASPX
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Listar.aspx.cs" Inherits="Ex_05.Listar" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        body {
+
+            background-image: url('https://i.pinimg.com/originals/63/30/24/6330245cd2745cb1807559d1aaad79ef.jpg');
+        }
+
+        th, td {
+            width: 14.28%; 
+            text-align: center;
+            padding: 8px;
+            border: 1px solid #dddddd;
+        }
+
+        th {
+            background-color: black;
+            color: white;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        b_backbutton {
+
+            align-content: center;
+        }
+    </style>
+
+    <title></title>
+    <%display_data();%>  
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:Button ID="b_backbutton" runat="server" Text="VOLTAR" Height="66px" OnClick="b_backbutton_Click" Width="131px" />
+        </div>
+    </form>
+</body>
+</html>
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+LISTAR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Security.AccessControl;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_05
+{
+    public partial class Listar : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void display_data()
+        {
+            string connection_string; // atributo de método do tipo string...
+            SqlConnection conn;       // instancia de classe para criar uma conexão com a base de dados...
+                                      //A classe SqlConnection faz parte do namespace System.Data.SqlClient e é usada para representar uma conexão aberta a um banco de dados SQL Server...
+            connection_string = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
+            // atributo de método recebe a string de conexão com a base de dados...
+            conn = new SqlConnection(connection_string); // A nova linha de código em questão está inicializando a instância da classe SqlConnection chamada conn com a string de conexão fornecida...
+            conn.Open(); // método de classe para abrir conexão com base de dados...
+
+            SqlCommand command; // variável para representar um comando SQL...
+            SqlDataReader data_reader; // variável para ler os dados em um banco de dados...
+
+            String sql, output = "<h1>.:Listagem de Motos:.</h1>" +
+              "<table border= '1'>" +
+              "<tr><th>id</th><th>Matricula</th><th>Proprietario</th><th>Marca</th><th>Modelo</th><th>Cilindrada</th><th>Foto</th>" +
+              "</tr>";
+            sql = "Select id, matricula, proprietario, marca, modelo, cilindrada, foto from motos";
+
+            //Este trecho de código prepara a conexão com o banco de dados, inicializa variáveis para comandos SQL e define uma consulta SQL básica. 
+
+            command = new SqlCommand(sql, conn); //a variável inicializa uma instância de SqlCommand, associando a consulta SQL (sql) a ser executada e a conexão ao banco de dados (conn)...
+
+            int num_rows = 0; // conta a quantidade de registros...
+
+            data_reader = command.ExecuteReader(); // uma variável do tipo SqlDataReader que está sendo inicializada com o resultado da execução da consulta
+
+            while (data_reader.Read()) // enquanto os dados estiverem sendo lidos...
+            {
+                output += "<tr><td>" + data_reader.GetValue(0) + "</td>" +
+                          "<td>" + data_reader.GetValue(1) + "</td>" +
+                          "<td>" + data_reader.GetValue(2) + "</td>" +
+                          "<td>" + data_reader.GetValue(3) + "</td>" +
+                          "<td>" + data_reader.GetValue(4) + "</td>" +
+                          "<td>" + data_reader.GetValue(5) + "</td>" +
+                          "<td>" + data_reader.GetValue(6) + "</td></tr>";
+                num_rows++; // Este contador é incrementado a cada iteração do loop, rastreando o número total de registros (linhas) lidos...
+            }
+
+            //lê os dados do banco de dados e constroi as linhas da tabela HTML (<tr>) com as informações de cada registro...
+
+            output = output + "</table>"; // Após o término do loop, esta linha adiciona a tag de fechamento </table> à variável output, finalizando assim a tabela HTML...
+
+            // Fecha o leitor de dados e a conexão com o banco de dados...
+            data_reader.Close();
+            Response.Write(output);
+            conn.Close();
+
+        }
+
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+            Server.Transfer("Index.aspx"); // ir para a página Index...
+        }
+    }
+}
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+INSERIR.ASPX
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Inserir.aspx.cs" Inherits="Ex_05.Inserir" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 161px;
+            margin: 0 0 67 0;
+            background-image: url('https://wallpapercave.com/wp/wp9141191.jpg');
+            background-size: cover; 
+        }
+
+        #container {
+            text-align: center;
+            color: greenyellow; 
+            margin-top: 50px; /* Ajuste o valor conforme necessário */
+        }
+
+        .input-container {
+            display: inline-block;
+            vertical-align: top;
+            border-block-color: black;
+            margin-bottom: 30px; 
+        }
+
+        .input-container label {
+            font-weight: bold;
+            color: greenyellow;
+            display: block;
+            margin-bottom: 5px; 
+            margin-top: 5px;
+        }
+
+        .input-container input[type="text"] {
+            width: 200px;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+            height: 3px;
+        }
+
+        .input-container button {
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        #bt_inserir, #bt_voltar {
+            background-color: greenyellow;
+            color: black;
+            border: 2px solid black;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 270px; 
+        }
+
+        #bt_inserir:hover, #bt_voltar:hover {
+            background-color: darkgreen;
+            color: white;
+        }
+    </style>
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div id="container">
+            <div class="input-container">
+                <label for="txt_matricula">Matricula</label>
+                <asp:TextBox ID="txt_matricula" runat="server"></asp:TextBox>
+            </div>
+             <div class="input-container">
+             <label for="txt_proprietario">Proprietário</label>
+             <asp:TextBox ID="txt_proprietario" runat="server"></asp:TextBox>
+         </div>
+         <div class="input-container">
+             <label for="txt_marca">Marca</label>
+             <asp:TextBox ID="txt_marca" runat="server"></asp:TextBox>
+         </div>
+         <div class="input-container">
+             <label for="txt_modelo">Modelo</label>
+             <asp:TextBox ID="txt_modelo" runat="server"></asp:TextBox>   
+         </div>
+         <div class="input-container">
+             <label for="txt_cilindrada">Cilindrada</label>
+             <asp:TextBox ID="txt_cilindrada" runat="server"></asp:TextBox>   
+         </div>
+            <!-- Outros controles aqui -->
+            <div class="input-container">
+                <label for="txt_foto">Foto</label>
+                <asp:TextBox ID="txt_foto" runat="server"></asp:TextBox>
+                <asp:Button ID="bt_carregar_foto" runat="server" Text="URL" OnClick="bt_carregar_foto_Click" Width="55px" />
+            </div>
+            <div class="input-container">
+            </div>
+        </div>
+        <p>
+            <asp:Button ID="bt_inserir" runat="server" Text="Inserir" OnClick="bt_inserir_Click" Height="47px" Width="219px" />
+            <asp:Button ID="bt_voltar" runat="server" Text="Retornar" OnClick="bt_voltar_Click" Height="47px" Width="219px" />
+        </p>
+        <p>
+            &nbsp;
+        </p>
+    </form>
+</body>
+</html>
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+INSERIR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_05
+{
+    public partial class Inserir : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void bt_carregar_foto_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void bt_inserir_Click(object sender, EventArgs e)
+        {
+
+            string connetionString;
+            SqlConnection con;
+            connetionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            String sql = "";
+            sql = "INSERT INTO motos(matricula, proprietario, marca, modelo, cilindrada, foto) VALUES('" + txt_matricula.Text + "', '" + txt_proprietario.Text + "', '" + txt_marca.Text + "', '" + txt_modelo.Text + "', '" + txt_cilindrada.Text + "', '" + txt_foto.Text + "')";
+            command = new SqlCommand(sql, con);
+            adapter.InsertCommand = new SqlCommand(sql, con);
+            adapter.InsertCommand.ExecuteNonQuery();
+
+            command.Dispose();
+            con.Close();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados inseridos com sucesso');window.location ='Listar.aspx';", true);
+
+        }
+
+        protected void bt_voltar_Click(object sender, EventArgs e)
+        {
+            Server.Transfer("Index.aspx"); 
+        }
+    }
+
+}
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+EDITAR.ASPX
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Editar.aspx.cs" Inherits="Ex_05.Editar" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* Alterado para ocupar 100% da altura da tela */
+            background-image: url('https://wallpaperset.com/w/full/f/6/3/510927.jpg');
+            background-size: cover; 
+            margin: 0;
+        }
+
+        #container {
+            text-align: center;
+            color: greenyellow; 
+            margin-top: 50px; /* Ajuste para mover a tabela para baixo */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 0 auto; /* Para centralizar a tabela horizontalmente */
+        }
+
+        th, td {
+            border: 3px solid black;
+            padding: 20px;
+            text-align: center;
+            color: greenyellow;
+            font-size: 18px;
+            font-weight: bold;
+            width: 150px; /* Largura fixa das colunas */
+        }
+
+        th {
+            background-color: greenyellow;
+            color: black;
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+        }
+
+        input[type="button"] {
+            background-color: greenyellow;
+            color: black;
+            border: 2px solid black;
+            padding: 10px; /* Ajuste conforme necessário */
+            width: 100px; /* Largura fixa dos botões */
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        input[type="button"]:hover {
+            background-color: darkgreen;
+            color: white;
+        }
+    </style>
+
+        <title></title>
+    <%display_data2();%>  
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+  
+        </div>
+    </form>
+</body>
+</html>
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+EDITAR.ASPX.CS
 
 using System;
 using System.Collections.Generic;
@@ -27,82 +560,183 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Ex_04
+namespace Ex_05
 {
-    public partial class Lista_simples : System.Web.UI.Page
+    public partial class Editar : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-    
+
+        }
+        protected void display_data2()
+        { 
             string connetionString;
-            SqlConnection con;
-            // veja a imagem abaixo para saber onde vai buscar o caminho da conexão
-            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            SqlConnection con; 
+            connetionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
             con = new SqlConnection(connetionString);
             con.Open();
-            // Response.Write("Ligado com sucesso!");
-            // a linha acima utilizo apenas para ver se a conexão é feita com sucesso
+
             SqlCommand command;
             SqlDataReader dataReader;
-            String sql, Output = "<h1>Listagem de livros</h1>" +
-                "<table border= '1'>" +
-                "<tr><th>Id</th><th>Nome</th><th>Num. páginas</th><th>Tamanho</th>" +
-                "</tr>";
-            sql = "Select Id, nome, n_paginas, tamanho from livro";
-
+            String sql;
+            sql = "Select id, matricula, proprietario, marca, modelo, cilindrada, foto from motos";
             command = new SqlCommand(sql, con);
-            int numero_registos = 0;
             dataReader = command.ExecuteReader();
+
+            Response.Write("<table border='1'>");
+            Response.Write("<tr>");
+            Response.Write("<th>Id</th>");
+            Response.Write("<th>Matrícula</th>");
+            Response.Write("<th>Proprietário</th>");
+            Response.Write("<th>Marca</th>");
+            Response.Write("<th>Modelo</th>");
+            Response.Write("<th>Cilindrada</th>");
+            Response.Write("<th>Foto</th>");
+            Response.Write("</tr>");
+
             while (dataReader.Read())
             {
-                Output = Output + "<tr><td>" + dataReader.GetValue(0) + "</td>" +
-                    "<td>" + dataReader.GetValue(1) + "</td>" +
-                    "<td>" + dataReader.GetValue(2) + "</td>" +
-                    "<td>" + dataReader.GetValue(3) + "</td></tr>";
-                numero_registos++;
+                Response.Write("<tr>");
+                Response.Write("<td>" + dataReader.GetValue(0) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(1) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(2) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(3) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(4) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(5) + "</td>");
+                Response.Write("<td><img src='" + dataReader.GetValue(6) + "' alt='IMG' width='50' height='50'></td>");
+                Response.Write("<td>");
+                Response.Write("<input type='button' value='Editar' onclick=\"window.open('Editar2.aspx?id=" + dataReader.GetValue(0) + "')\" />");
+                Response.Write("<input type='button' value='Eliminar' onclick=\"window.open('Eliminar.aspx?id=" + dataReader.GetValue(0) + "')\" />");
+                Response.Write("</td>");
+                Response.Write("</tr>");
             }
-            Output = Output + "<tr><th colspan='4'>Numero de registo -->"
-                + numero_registos + "</th></tr>";
-            Output = Output + "</table>";
-            Response.Write(Output);
+
+            Response.Write("</table>");
             dataReader.Close();
             con.Close();
 
         }
 
+        }
+
     }
 
-}   
-
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
 
-INSERE.ASPX
+EDITAR2.APPX
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Insere.aspx.cs" Inherits="Ex_04.Insere" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Editar2.aspx.cs" Inherits="Ex_05.Editar2" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 161px;
+            margin: 0;
+            background-image: url('https://image.winudf.com/v2/image/Y29tLm1vdG93YWxscGFwZXIuaGQubW90b3BpY3R1cmVzLnBob3Rvcy5iYWNrZ3JvdW5kLmN1dGUuY29vbC5hcnQubW90b2ltYWdlcy5oZC5mcmVlX3NjcmVlbl84XzE1MzM5NDQyMDJfMDI1/screen-8.jpg?fakeurl=1&type=.jpg');
+            background-size: cover; 
+        }
+
+        #container {
+            text-align: center;
+            color: greenyellow; 
+            margin-top: 50px; /* Ajuste o valor conforme necessário */
+        }
+
+        .input-container {
+            display: inline-block;
+            vertical-align: top;
+            border-block-color: black;
+            margin-bottom: 30px; 
+        }
+
+        .input-container label {
+            font-weight: bold;
+            color: greenyellow;
+            display: block;
+            margin-bottom: 5px; 
+            margin-top: 5px;
+        }
+
+        .input-container input[type="text"] {
+            width: 200px;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+            height: 3px;
+        }
+
+        .input-container button {
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        #bt_alterar, #bt_cancelar {
+            background-color: greenyellow;
+            color: black;
+            border: 2px solid black;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 350px; 
+        }
+
+        #bt_inserir:hover, #bt_voltar:hover {
+            background-color: darkgreen;
+            color: white;
+        }
+    </style>
     <title></title>
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
-            <asp:Label ID="lbl_nome" runat="server" Text="Nome:"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
-            <br /><br />
-            <asp:Label ID="lbl_npag" runat="server" Text="Nº de Páginas:"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_npag" runat="server"></asp:TextBox>
-            <br /> <br />
-            <asp:Label ID="lbl_tam" runat="server" Text="Tamanho:"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_tam" runat="server"></asp:TextBox>
-            <br /><br />
-            <asp:Button ID="Button1" runat="server" Text="Inserir" OnClick="Button1_Click" />&nbsp;
+        <div id="container">
+            <div class="input-container">
+                <label for="txt_id">ID</label>
+                <asp:TextBox ID="txt_id" runat="server" ReadOnly="True"></asp:TextBox>
+            </div>
+            <div class="input-container">
+                <label for="txt_matricula">Matricula</label>
+                <asp:TextBox ID="txt_matricula" runat="server"></asp:TextBox>
+            </div>
+            <div class="input-container">
+                <label for="txt_proprietario">Proprietário</label>
+                <asp:TextBox ID="txt_proprietario" runat="server"></asp:TextBox>
+            </div>
+            <div class="input-container">
+                <label for="txt_marca">Marca</label>
+                <asp:TextBox ID="txt_marca" runat="server"></asp:TextBox>
+            </div>
+            <div class="input-container">
+                <label for="txt_modelo">Modelo</label>
+                <asp:TextBox ID="txt_modelo" runat="server"></asp:TextBox>   
+            </div>
+            <div class="input-container">
+                <label for="txt_cilindrada">Cilindrada</label>
+                <asp:TextBox ID="txt_cilindrada" runat="server"></asp:TextBox>   
+            </div>
+            <div class="input-container">
+                <label for="txt_foto">Foto</label>
+                <asp:TextBox ID="txt_foto" runat="server"></asp:TextBox>
+                <asp:Button ID="bt_carregar_foto" runat="server" Text="URL" OnClick="bt_carregar_foto_Click" Width="55px" Height="26px" />
+            </div>
+            <div class="input-container">
+            </div>
         </div>
+        <p>
+                <asp:Button ID="bt_alterar" runat="server" Text="Inserir" OnClick="bt_alterar_Click" Height="47px" Width="219px" />
+            <asp:Button ID="bt_cancelar" runat="server" Text="Retornar" OnClick="bt_cancelar_Click" Height="47px" Width="219px" />
+            </p>
+        <p>
+            &nbsp;</p>
     </form>
 </body>
 </html>
@@ -111,7 +745,7 @@ INSERE.ASPX
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
 
-INSERE.ASPX.CS
+EDITAR2.ASPX.CS
 
 using System;
 using System.Collections.Generic;
@@ -121,206 +755,85 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Ex_04
+namespace Ex_05
 {
-    public partial class Insere : System.Web.UI.Page
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-
-            string connetionString;
-            SqlConnection con;
-            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
-            con = new SqlConnection(connetionString);
-            con.Open();
-            // Response.Write("Ligado com sucesso!");
-            //con.Close();
-            SqlCommand command;
-            SqlDataAdapter adapter = new SqlDataAdapter();
-            String sql = "";
-            sql = "Insert into livro(nome, n_paginas, tamanho) values ('" + txt_nome.Text + "', " + txt_npag.Text + ", '" + txt_tam.Text + "')";
-            command = new SqlCommand(sql, con);
-            adapter.InsertCommand = new SqlCommand(sql, con);
-            adapter.InsertCommand.ExecuteNonQuery();
-
-            command.Dispose(); 
-            con.Close(); 
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados inseridos com sucesso');window.location ='Lista_simples.aspx';", true);
-
-        }
-
-    }
-
-}
-
-#-------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------
-
-EDITA.ASPX.CS
-
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-
-namespace Ex_04
-{
-    public partial class edita : System.Web.UI.Page
-    {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-            string connetionString; 
-            SqlConnection con; // veja a imagem abaixo para saber onde vai buscar o caminho da
-            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
-            con = new SqlConnection(connetionString);
-            con.Open();
-
-            SqlCommand command; 
-            SqlDataReader dataReader; 
-            String sql; 
-            sql = "Select Id, nome, n_paginas, tamanho from livro"; 
-            command = new SqlCommand(sql, con); 
-            dataReader = command.ExecuteReader(); 
-
-            Response.Write("<h1>Editar Utilizadores</h1><br/>"); 
-            Response.Write("<table border='1'>"); 
-            Response.Write("<tr>"); 
-            Response.Write("<th>Id</th>"); 
-            Response.Write("<th>Nome</th>"); 
-            Response.Write("<th>Nº Pag.</th>"); 
-            Response.Write("<th>Tamanho.</th>"); 
-            Response.Write("<th>Ação</th>"); 
-            Response.Write("</tr>"); 
-
-            while (dataReader.Read()) { Response.Write("<tr>"); 
-                Response.Write("<td>" + dataReader.GetValue(0) + "</td>"); 
-                Response.Write("<td>" + dataReader.GetValue(1) + "</td>"); 
-                Response.Write("<td>" + dataReader.GetValue(2) + "</td>"); 
-                Response.Write("<td>" + dataReader.GetValue(3) + "</td>"); 
-                Response.Write("<td><input type='button' Value='Editar' onclick=window.open('Edita2.aspx?id=" + dataReader.GetValue(0) + "') />&nbsp<input type='button' Value='Eliminar' onclick=window.open('Elimina.aspx?id=" + dataReader.GetValue(0) + "') /></td>"); 
-                Response.Write("</tr>"); }
-                Response.Write("</table>"); dataReader.Close(); con.Close();
-
-        }
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-
-        }
-    }
-}
-
-#-------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------
-
-EDITA2.ASPX
-
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="edita2.aspx.cs" Inherits="Ex_04.edita2" %>
-
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <div>
-            <br />
-            <asp:Label ID="lbl_id" runat="server" Text="Id:"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_id" runat="server" Columns="3" ReadOnly="True"></asp:TextBox>
-            <br /><br />
-            <asp:Label ID="lbl_nome" runat="server" Text="Nome:"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_nome" runat="server" Columns="50"></asp:TextBox>
-            <br /><br />
-            <asp:Label ID="lbl_npag" runat="server" Text="Nº Pág"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_npag" runat="server" Columns="5"></asp:TextBox>
-            <br /><br />
-            <asp:Label ID="lbl_tam" runat="server" Text="Tamanho"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_tam" runat="server" Columns="10"></asp:TextBox>
-            <br /><br />
-            <asp:Button ID="b_alterar" runat="server" Text="Alterar" OnClick="b_alterar_Click"/>&nbsp;
-            <asp:Button ID="b_cancelar" runat="server" Text="Cancelar" />
-        </div>
-    </form>
-</body>
-</html>
-
-#-------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------
-
-EDITA2.ASPX.CS
-
-using System.Data.SqlClient;
-using System.Web.UI;
-using System;
-
-namespace Ex_04
-{
-    public partial class edita2 : System.Web.UI.Page
+    public partial class Editar2 : System.Web.UI.Page
     {
         protected void Page_Init(object sender, EventArgs e)
         {
             string id = Request.QueryString["id"];
             txt_id.Text = id;
+
             if (id != null)
             {
-                string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+                string connetionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
                 using (SqlConnection con = new SqlConnection(connetionString))
                 {
                     con.Open();
-                    string sql = "Select * from livro where id=@id";
+                    string sql = "Select * from motos where id=@id";
+
                     using (SqlCommand command = new SqlCommand(sql, con))
                     {
                         command.Parameters.AddWithValue("@id", id);
+
                         using (SqlDataReader dataReader = command.ExecuteReader())
                         {
                             if (dataReader.Read())
                             {
-                                txt_nome.Text = dataReader.GetValue(1).ToString();
-                                txt_npag.Text = dataReader.GetValue(2).ToString();
-                                txt_tam.Text = dataReader.GetValue(3).ToString();
+                                // Supondo que os campos da tabela 'motos' são os mesmos usados no exemplo
+                                txt_matricula.Text = dataReader["matricula"].ToString();
+                                txt_proprietario.Text = dataReader["proprietario"].ToString();
+                                txt_marca.Text = dataReader["marca"].ToString();
+                                txt_modelo.Text = dataReader["modelo"].ToString();
+                                txt_cilindrada.Text = dataReader["cilindrada"].ToString();
+                                // Certifique-se de ajustar os nomes dos campos conforme a sua tabela
                             }
                         }
                     }
                 }
             }
+
             else
+
             {
-                // Trate o caso em que "id" não está presente na string de consulta.
+                // Se não houver ID, pode ser um novo registro, você pode lidar com isso conforme necessário
             }
+
         }
 
-        protected void b_alterar_Click(object sender, EventArgs e)
+        protected void bt_alterar_Click(object sender, EventArgs e)
         {
-            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            string connetionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connetionString))
             {
                 con.Open();
-                string sql = "update livro set nome=@nome, n_paginas=@npag, tamanho=@tam where id=@id";
+                string sql = "update motos set matricula=@matricula, proprietario=@proprietario, marca=@marca, modelo=@modelo, cilindrada=@cilindrada where id=@id";
                 using (SqlCommand command = new SqlCommand(sql, con))
                 {
-                    command.Parameters.AddWithValue("@nome", txt_nome.Text);
-                    command.Parameters.AddWithValue("@npag", txt_npag.Text);
-                    command.Parameters.AddWithValue("@tam", txt_tam.Text);
+                    command.Parameters.AddWithValue("@matricula", txt_matricula.Text);
+                    command.Parameters.AddWithValue("@proprietario", txt_proprietario.Text);
+                    command.Parameters.AddWithValue("@marca", txt_marca.Text);
+                    command.Parameters.AddWithValue("@modelo", txt_modelo.Text);
+                    command.Parameters.AddWithValue("@cilindrada", txt_cilindrada.Text);
                     command.Parameters.AddWithValue("@id", txt_id.Text);
                     command.ExecuteNonQuery();
                 }
             }
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados alterados com sucesso');window.location='Lista_simples.aspx';", true);
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados alterados com sucesso');window.location='Listar.aspx';", true);
+
+            }
+
+        protected void bt_cancelar_Click(object sender, EventArgs e)
+                {
+
+            Server.Transfer("Editar.aspx");
+
+        }
+
+        protected void bt_carregar_foto_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
@@ -329,36 +842,118 @@ namespace Ex_04
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
 
-ELIMINA.ASPX
+ELIMINAR.APSX
 
-<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="elimina.aspx.cs" Inherits="Ex_04.elimina" %>
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Eliminar.aspx.cs" Inherits="Ex_05.Eliminar" %>
 
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 161px;
+            margin: 0;
+            background-image: url('https://i0.wp.com/wallpapercave.com/wp/wp1851178.jpg');
+            background-size: cover; 
+        }
+
+        #container {
+            text-align: center;
+            color: greenyellow; 
+            margin-top: 50px; /* Ajuste o valor conforme necessário */
+        }
+
+        .input-container {
+            display: inline-block;
+            vertical-align: top;
+            border-block-color: black;
+            margin-bottom: 30px; 
+        }
+
+        .input-container label {
+            font-weight: bold;
+            color: greenyellow;
+            display: block;
+            margin-bottom: 5px; 
+            margin-top: 5px;
+        }
+
+        .input-container input[type="text"] {
+            width: 200px;
+            padding: 20px;
+            box-sizing: border-box;
+            font-size: 16px;
+            height: 3px;
+        }
+
+        .input-container button {
+            padding: 15px;
+            font-size: 16px;
+        }
+
+        #bt_eliminar, #bt_cancelar {
+            background-color: greenyellow;
+            color: black;
+            border: 2px solid black;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 350px; 
+        }
+
+        #bt_eliminar:hover, #bt_cancelar:hover {
+            background-color: darkgreen;
+            color: white;
+        }
+    </style>
     <title></title>
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
-            <br />
-            <asp:Label ID="lbl_id" runat="server" Text="Id:"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_id" runat="server" Columns="3" ReadOnly="True"></asp:TextBox>
-            <br /><br />
-            <asp:Label ID="lbl_nome" runat="server" Text="Nome:"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_nome" runat="server" Columns="50" ReadOnly="True"></asp:TextBox>
-            <br /><br />
-            <asp:Label ID="lbl_npag" runat="server" Text="Nº Pág"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_npag" runat="server" Columns="5" ReadOnly="True"></asp:TextBox>
-            <br /><br />
-            <asp:Label ID="lbl_tam" runat="server" Text="Tamanho"></asp:Label>&nbsp;
-            <asp:TextBox ID="txt_tam" runat="server" Columns="10" ReadOnly="True"></asp:TextBox>
-            <br /><br />
-            <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click"/>&nbsp;
-            <asp:Button ID="b_cancelar" runat="server" Text="Cancelar" />
+        <div id="container">
+            <div class="input-container">
+                <label for="txt_id">ID</label>
+                <asp:TextBox ID="txt_id" runat="server" ReadOnly="True"></asp:TextBox>
+            </div>
+            <div class="input-container">
+                <label for="txt_matricula">Matricula</label>
+                <asp:TextBox ID="txt_matricula" runat="server" ReadOnly="True"></asp:TextBox>
+            </div>
+            <div class="input-container">
+                <label for="txt_proprietario">Proprietário</label>
+                <asp:TextBox ID="txt_proprietario" runat="server" ReadOnly="True"></asp:TextBox>
+            </div>
+            <div class="input-container">
+                <label for="txt_marca">Marca</label>
+                <asp:TextBox ID="txt_marca" runat="server" ReadOnly="True"></asp:TextBox>
+            </div>
+            <div class="input-container">
+                <label for="txt_modelo">Modelo</label>
+                <asp:TextBox ID="txt_modelo" runat="server" ReadOnly="True"></asp:TextBox>   
+            </div>
+            <div class="input-container">
+                <label for="txt_cilindrada">Cilindrada</label>
+                <asp:TextBox ID="txt_cilindrada" runat="server" ReadOnly="True"></asp:TextBox>   
+            </div>
+            <div class="input-container">
+                <label for="txt_foto">Foto</label>
+                <asp:TextBox ID="txt_foto" runat="server" ReadOnly="True"></asp:TextBox>
+                <asp:Button ID="bt_carregar_foto" runat="server" Text="URL" OnClick="bt_carregar_foto_Click" Width="55px" Height="26px" />
+            </div>
+            <div class="input-container">
+            </div>
         </div>
+        <p>
+                <asp:Button ID="bt_eliminar" runat="server" Text="Eliminar" OnClick="bt_eliminar_Click" Height="47px" Width="219px" />
+            <asp:Button ID="bt_cancelar" runat="server" Text="Retornar" OnClick="bt_cancelar_Click" Height="47px" Width="219px" />
+            </p>
+        <p>
+            &nbsp;</p>
     </form>
 </body>
 </html>
@@ -366,8 +961,6 @@ ELIMINA.ASPX
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------
-
-ELIMINA.ASPX.CS
 
 using System;
 using System.Collections.Generic;
@@ -377,60 +970,83 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Ex_04
+namespace Ex_05
 {
-    public partial class elimina : System.Web.UI.Page
+    public partial class Eliminar : System.Web.UI.Page
     {
         protected void Page_Init(object sender, EventArgs e)
         {
+
             string id = Request.QueryString["id"];
             txt_id.Text = id;
+
             if (id != null)
             {
-                string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+                string connetionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
                 using (SqlConnection con = new SqlConnection(connetionString))
                 {
                     con.Open();
-                    string sql = "Select * from livro where id=@id";
+                    string sql = "Select * from motos where id=@id";
+
                     using (SqlCommand command = new SqlCommand(sql, con))
                     {
                         command.Parameters.AddWithValue("@id", id);
+
                         using (SqlDataReader dataReader = command.ExecuteReader())
                         {
                             if (dataReader.Read())
                             {
-                                txt_nome.Text = dataReader.GetValue(1).ToString();
-                                txt_npag.Text = dataReader.GetValue(2).ToString();
-                                txt_tam.Text = dataReader.GetValue(3).ToString();
+                                // Supondo que os campos da tabela 'motos' são os mesmos usados no exemplo
+                                txt_matricula.Text = dataReader["matricula"].ToString();
+                                txt_proprietario.Text = dataReader["proprietario"].ToString();
+                                txt_marca.Text = dataReader["marca"].ToString();
+                                txt_modelo.Text = dataReader["modelo"].ToString();
+                                txt_cilindrada.Text = dataReader["cilindrada"].ToString();
+                                // Certifique-se de ajustar os nomes dos campos conforme a sua tabela
                             }
                         }
                     }
                 }
             }
+
             else
+
             {
-                // Trate o caso em que "id" não está presente na string de consulta.
+                // Se não houver ID, pode ser um novo registro, você pode lidar com isso conforme necessário
             }
+
         }
 
-        protected void b_eliminar_Click(object sender, EventArgs e)
+        protected void bt_carregar_foto_Click(object sender, EventArgs e)
         {
 
-            string connetionString; 
+        }
+
+        protected void bt_eliminar_Click(object sender, EventArgs e)
+        {
+
+            string connetionString;
             SqlConnection con;// veja a imagem abaixo para saber onde vai buscar o caminho da conexão
-            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            connetionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
             con = new SqlConnection(connetionString);
             con.Open();// Response.Write("Ligado com sucesso!");// a linha acima utilizo apenas para ver se a conexão é feita com sucesso
             SqlCommand command;
             SqlDataAdapter adapter = new SqlDataAdapter();
             String sql = "";
-            sql = "delete livro where id="+ txt_id.Text;// Response.Write(sql);// a linha acima serve para verem o que esta a ser executado no vosso sql
+            sql = "delete motos where id=" + txt_id.Text;// Response.Write(sql);// a linha acima serve para verem o que esta a ser executado no vosso sql
             command = new SqlCommand(sql, con);
             adapter.DeleteCommand = new SqlCommand(sql, con);
             adapter.DeleteCommand.ExecuteNonQuery();
             command.Dispose();
             con.Close();
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Registo apagado com sucesso');window.location='Lista_simples.aspx';", true);
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Registo apagado com sucesso');window.location='Listar.aspx';", true);
+
+        }
+
+        protected void bt_cancelar_Click(object sender, EventArgs e)
+        {
+
+            Server.Transfer("Editarx.aspx");
 
         }
     }
