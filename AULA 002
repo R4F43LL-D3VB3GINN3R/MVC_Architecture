@@ -732,7 +732,7 @@ EDITAR2.APPX
             </div>
         </div>
         <p>
-                <asp:Button ID="bt_alterar" runat="server" Text="Inserir" OnClick="bt_alterar_Click" Height="47px" Width="219px" />
+                <asp:Button ID="bt_alterar" runat="server" Text="Alterar" OnClick="bt_alterar_Click" Height="47px" Width="219px" />
             <asp:Button ID="bt_cancelar" runat="server" Text="Retornar" OnClick="bt_cancelar_Click" Height="47px" Width="219px" />
             </p>
         <p>
