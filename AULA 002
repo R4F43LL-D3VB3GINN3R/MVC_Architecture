@@ -1,1 +1,441 @@
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
 
+CREATE TABLE [dbo].[motos] (
+    [Id]           INT           IDENTITY (1, 1) NOT NULL,
+    [matricula]    VARCHAR (8)   NULL,
+    [proprietario] VARCHAR (50)  NULL,
+    [marca]        VARCHAR (15)  NOT NULL,
+    [modelo]       VARCHAR (15)  NOT NULL,
+    [cilindrada]   INT           NOT NULL,
+    [foto]         VARCHAR (300) NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+LISTA_SIMPLES.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_04
+{
+    public partial class Lista_simples : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+    
+            string connetionString;
+            SqlConnection con;
+            // veja a imagem abaixo para saber onde vai buscar o caminho da conexão
+            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+            // Response.Write("Ligado com sucesso!");
+            // a linha acima utilizo apenas para ver se a conexão é feita com sucesso
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = "<h1>Listagem de livros</h1>" +
+                "<table border= '1'>" +
+                "<tr><th>Id</th><th>Nome</th><th>Num. páginas</th><th>Tamanho</th>" +
+                "</tr>";
+            sql = "Select Id, nome, n_paginas, tamanho from livro";
+
+            command = new SqlCommand(sql, con);
+            int numero_registos = 0;
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                Output = Output + "<tr><td>" + dataReader.GetValue(0) + "</td>" +
+                    "<td>" + dataReader.GetValue(1) + "</td>" +
+                    "<td>" + dataReader.GetValue(2) + "</td>" +
+                    "<td>" + dataReader.GetValue(3) + "</td></tr>";
+                numero_registos++;
+            }
+            Output = Output + "<tr><th colspan='4'>Numero de registo -->"
+                + numero_registos + "</th></tr>";
+            Output = Output + "</table>";
+            Response.Write(Output);
+            dataReader.Close();
+            con.Close();
+
+        }
+
+    }
+
+}   
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+INSERE.ASPX
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Insere.aspx.cs" Inherits="Ex_04.Insere" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:Label ID="lbl_nome" runat="server" Text="Nome:"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="lbl_npag" runat="server" Text="Nº de Páginas:"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_npag" runat="server"></asp:TextBox>
+            <br /> <br />
+            <asp:Label ID="lbl_tam" runat="server" Text="Tamanho:"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_tam" runat="server"></asp:TextBox>
+            <br /><br />
+            <asp:Button ID="Button1" runat="server" Text="Inserir" OnClick="Button1_Click" />&nbsp;
+        </div>
+    </form>
+</body>
+</html>
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+INSERE.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_04
+{
+    public partial class Insere : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+
+            string connetionString;
+            SqlConnection con;
+            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+            // Response.Write("Ligado com sucesso!");
+            //con.Close();
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            String sql = "";
+            sql = "Insert into livro(nome, n_paginas, tamanho) values ('" + txt_nome.Text + "', " + txt_npag.Text + ", '" + txt_tam.Text + "')";
+            command = new SqlCommand(sql, con);
+            adapter.InsertCommand = new SqlCommand(sql, con);
+            adapter.InsertCommand.ExecuteNonQuery();
+
+            command.Dispose(); 
+            con.Close(); 
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados inseridos com sucesso');window.location ='Lista_simples.aspx';", true);
+
+        }
+
+    }
+
+}
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+EDITA.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_04
+{
+    public partial class edita : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+            string connetionString; 
+            SqlConnection con; // veja a imagem abaixo para saber onde vai buscar o caminho da
+            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+
+            SqlCommand command; 
+            SqlDataReader dataReader; 
+            String sql; 
+            sql = "Select Id, nome, n_paginas, tamanho from livro"; 
+            command = new SqlCommand(sql, con); 
+            dataReader = command.ExecuteReader(); 
+
+            Response.Write("<h1>Editar Utilizadores</h1><br/>"); 
+            Response.Write("<table border='1'>"); 
+            Response.Write("<tr>"); 
+            Response.Write("<th>Id</th>"); 
+            Response.Write("<th>Nome</th>"); 
+            Response.Write("<th>Nº Pag.</th>"); 
+            Response.Write("<th>Tamanho.</th>"); 
+            Response.Write("<th>Ação</th>"); 
+            Response.Write("</tr>"); 
+
+            while (dataReader.Read()) { Response.Write("<tr>"); 
+                Response.Write("<td>" + dataReader.GetValue(0) + "</td>"); 
+                Response.Write("<td>" + dataReader.GetValue(1) + "</td>"); 
+                Response.Write("<td>" + dataReader.GetValue(2) + "</td>"); 
+                Response.Write("<td>" + dataReader.GetValue(3) + "</td>"); 
+                Response.Write("<td><input type='button' Value='Editar' onclick=window.open('Edita2.aspx?id=" + dataReader.GetValue(0) + "') />&nbsp<input type='button' Value='Eliminar' onclick=window.open('Elimina.aspx?id=" + dataReader.GetValue(0) + "') /></td>"); 
+                Response.Write("</tr>"); }
+                Response.Write("</table>"); dataReader.Close(); con.Close();
+
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+EDITA2.ASPX
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="edita2.aspx.cs" Inherits="Ex_04.edita2" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <br />
+            <asp:Label ID="lbl_id" runat="server" Text="Id:"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_id" runat="server" Columns="3" ReadOnly="True"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="lbl_nome" runat="server" Text="Nome:"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_nome" runat="server" Columns="50"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="lbl_npag" runat="server" Text="Nº Pág"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_npag" runat="server" Columns="5"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="lbl_tam" runat="server" Text="Tamanho"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_tam" runat="server" Columns="10"></asp:TextBox>
+            <br /><br />
+            <asp:Button ID="b_alterar" runat="server" Text="Alterar" OnClick="b_alterar_Click"/>&nbsp;
+            <asp:Button ID="b_cancelar" runat="server" Text="Cancelar" />
+        </div>
+    </form>
+</body>
+</html>
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+EDITA2.ASPX.CS
+
+using System.Data.SqlClient;
+using System.Web.UI;
+using System;
+
+namespace Ex_04
+{
+    public partial class edita2 : System.Web.UI.Page
+    {
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            string id = Request.QueryString["id"];
+            txt_id.Text = id;
+            if (id != null)
+            {
+                string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+                using (SqlConnection con = new SqlConnection(connetionString))
+                {
+                    con.Open();
+                    string sql = "Select * from livro where id=@id";
+                    using (SqlCommand command = new SqlCommand(sql, con))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            if (dataReader.Read())
+                            {
+                                txt_nome.Text = dataReader.GetValue(1).ToString();
+                                txt_npag.Text = dataReader.GetValue(2).ToString();
+                                txt_tam.Text = dataReader.GetValue(3).ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Trate o caso em que "id" não está presente na string de consulta.
+            }
+        }
+
+        protected void b_alterar_Click(object sender, EventArgs e)
+        {
+            string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connetionString))
+            {
+                con.Open();
+                string sql = "update livro set nome=@nome, n_paginas=@npag, tamanho=@tam where id=@id";
+                using (SqlCommand command = new SqlCommand(sql, con))
+                {
+                    command.Parameters.AddWithValue("@nome", txt_nome.Text);
+                    command.Parameters.AddWithValue("@npag", txt_npag.Text);
+                    command.Parameters.AddWithValue("@tam", txt_tam.Text);
+                    command.Parameters.AddWithValue("@id", txt_id.Text);
+                    command.ExecuteNonQuery();
+                }
+            }
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados alterados com sucesso');window.location='Lista_simples.aspx';", true);
+        }
+    }
+}
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+ELIMINA.ASPX
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="elimina.aspx.cs" Inherits="Ex_04.elimina" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <br />
+            <asp:Label ID="lbl_id" runat="server" Text="Id:"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_id" runat="server" Columns="3" ReadOnly="True"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="lbl_nome" runat="server" Text="Nome:"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_nome" runat="server" Columns="50" ReadOnly="True"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="lbl_npag" runat="server" Text="Nº Pág"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_npag" runat="server" Columns="5" ReadOnly="True"></asp:TextBox>
+            <br /><br />
+            <asp:Label ID="lbl_tam" runat="server" Text="Tamanho"></asp:Label>&nbsp;
+            <asp:TextBox ID="txt_tam" runat="server" Columns="10" ReadOnly="True"></asp:TextBox>
+            <br /><br />
+            <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click"/>&nbsp;
+            <asp:Button ID="b_cancelar" runat="server" Text="Cancelar" />
+        </div>
+    </form>
+</body>
+</html>
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+
+ELIMINA.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_04
+{
+    public partial class elimina : System.Web.UI.Page
+    {
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            string id = Request.QueryString["id"];
+            txt_id.Text = id;
+            if (id != null)
+            {
+                string connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+                using (SqlConnection con = new SqlConnection(connetionString))
+                {
+                    con.Open();
+                    string sql = "Select * from livro where id=@id";
+                    using (SqlCommand command = new SqlCommand(sql, con))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        using (SqlDataReader dataReader = command.ExecuteReader())
+                        {
+                            if (dataReader.Read())
+                            {
+                                txt_nome.Text = dataReader.GetValue(1).ToString();
+                                txt_npag.Text = dataReader.GetValue(2).ToString();
+                                txt_tam.Text = dataReader.GetValue(3).ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Trate o caso em que "id" não está presente na string de consulta.
+            }
+        }
+
+        protected void b_eliminar_Click(object sender, EventArgs e)
+        {
+
+            string connetionString; 
+            SqlConnection con;// veja a imagem abaixo para saber onde vai buscar o caminho da conexão
+            connetionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\10792\Ex_04\App_Data\bd_biblioteca.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();// Response.Write("Ligado com sucesso!");// a linha acima utilizo apenas para ver se a conexão é feita com sucesso
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            String sql = "";
+            sql = "delete livro where id="+ txt_id.Text;// Response.Write(sql);// a linha acima serve para verem o que esta a ser executado no vosso sql
+            command = new SqlCommand(sql, con);
+            adapter.DeleteCommand = new SqlCommand(sql, con);
+            adapter.DeleteCommand.ExecuteNonQuery();
+            command.Dispose();
+            con.Close();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Registo apagado com sucesso');window.location='Lista_simples.aspx';", true);
+
+        }
+    }
+}
+
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------
