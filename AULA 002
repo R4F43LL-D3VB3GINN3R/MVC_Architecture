@@ -83,13 +83,47 @@ INDEX.ASPX
 <%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Index.aspx.cs" Inherits="Ex_05._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <div style="position: relative; width: 100%; height: 100%;">
-        <asp:Button ID="bt_inserir" runat="server" Text="INSERIR" OnClick="bt_inserir_click" style="position: absolute; bottom: 697px; left: 12px; height: 38px; width: 178px; right: 1173px;" />
-        <asp:Button ID="bt_listar" runat="server" Text="LISTAR" OnClick="bt_listar_click" style="position: absolute; bottom: 747px; left: 13px; height: 38px; width: 178px;" />
-        <asp:Button ID="bt_alt_el" runat="server" Text="ALTERAR" OnClick="bt_alt_el_click" style="position: absolute; bottom: 646px; left: 11px; height: 38px; width: 178px;" />
-        <img src="https://wallpaperaccess.com/full/853873.jpg" alt="bgimage" style="width: 100%; height: 100%;" />
-    </div>
+    <head>
+        <style>
+            body {
+                background-image: url('https://wallpaperaccess.com/full/4486.jpg');
+                background-size: cover;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 100vh;
+            }
+
+            .button {
+                font-size: 40px;
+                padding: 15px 30px;
+                height: 200px;
+                width: 300px;
+                cursor: pointer;
+                background-color: blueviolet;
+                border: 10px solid purple; 
+                font-weight: bold;
+                font-family: 'Comic Sans MS', cursive;
+            }
+
+            .button:hover {
+                background-color: black;
+                color: mediumpurple; 
+            }
+
+        </style>
+    </head>
+    <body>
+        <div>
+            <asp:Button ID="btnInserir" runat="server" Text="Inserir" OnClick="bt_inserir_click" CssClass="button" />
+            <asp:Button ID="btnAlterar" runat="server" Text="Alterar" OnClick="bt_alt_el_click" CssClass="button" />
+            <asp:Button ID="btnListar" runat="server" Text="Listar" OnClick="bt_listar_click" CssClass="button" />
+        </div>
+    </body>
 </asp:Content>
+
 
 
 #-------------------------------------------------------------------------------------
@@ -112,30 +146,19 @@ namespace Ex_05
 
     {
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
-
         protected void bt_inserir_click(object sender, EventArgs e)
         {
-
-            Server.Transfer("Inserir.aspx"); // ir para a página listar...
-
+            Response.Redirect("Inserir.aspx");
         }
 
         protected void bt_listar_click(object sender, EventArgs e)
         {
-
-            Server.Transfer("Listar.aspx"); // ir para a página listar...
-
+            Response.Redirect("Listar.aspx");
         }
 
         protected void bt_alt_el_click(object sender, EventArgs e)
         {
-
-            Server.Transfer("Editar.aspx"); // ir para a página listar...
-
+            Response.Redirect("Editar.aspx");
         }
 
     }
@@ -231,7 +254,7 @@ namespace Ex_05
             string connection_string; // atributo de método do tipo string...
             SqlConnection conn;       // instancia de classe para criar uma conexão com a base de dados...
                                       //A classe SqlConnection faz parte do namespace System.Data.SqlClient e é usada para representar uma conexão aberta a um banco de dados SQL Server...
-            connection_string = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
+            connection_string = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_05\\App_Data\\Database1.mdf;Integrated Security=True";
             // atributo de método recebe a string de conexão com a base de dados...
             conn = new SqlConnection(connection_string); // A nova linha de código em questão está inicializando a instância da classe SqlConnection chamada conn com a string de conexão fornecida...
             conn.Open(); // método de classe para abrir conexão com base de dados...
@@ -261,8 +284,9 @@ namespace Ex_05
                           "<td>" + data_reader.GetValue(3) + "</td>" +
                           "<td>" + data_reader.GetValue(4) + "</td>" +
                           "<td>" + data_reader.GetValue(5) + "</td>" +
-                          "<td>" + data_reader.GetValue(6) + "</td></tr>";
-                num_rows++; // Este contador é incrementado a cada iteração do loop, rastreando o número total de registros (linhas) lidos...
+                         "<td><img src='" + data_reader.GetValue(6) + "' alt='Foto' width='100' height='100' /></td></tr>";
+                num_rows++;
+              
             }
 
             //lê os dados do banco de dados e constroi as linhas da tabela HTML (<tr>) com as informações de cada registro...
@@ -278,7 +302,7 @@ namespace Ex_05
 
         protected void b_backbutton_Click(object sender, EventArgs e)
         {
-            Server.Transfer("Index.aspx"); // ir para a página Index...
+            Response.Redirect("Index.aspx");
         }
     }
 }
@@ -426,39 +450,55 @@ namespace Ex_05
 
         }
 
+
+
         protected void bt_carregar_foto_Click(object sender, EventArgs e)
         {
+
 
         }
 
         protected void bt_inserir_Click(object sender, EventArgs e)
         {
 
-            string connetionString;
-            SqlConnection con;
-            connetionString = @"Data Source = (LocalDB)\MSSQLLocalDB; AttachDbFilename = C:\Rafael\C_#\Ex_05\App_Data\Database1.mdf;Integrated Security=True";
-            con = new SqlConnection(connetionString);
-            con.Open();
-            SqlCommand command;
-            SqlDataAdapter adapter = new SqlDataAdapter();
-            String sql = "";
-            sql = "INSERT INTO motos(matricula, proprietario, marca, modelo, cilindrada, foto) VALUES('" + txt_matricula.Text + "', '" + txt_proprietario.Text + "', '" + txt_marca.Text + "', '" + txt_modelo.Text + "', '" + txt_cilindrada.Text + "', '" + txt_foto.Text + "')";
-            command = new SqlCommand(sql, con);
-            adapter.InsertCommand = new SqlCommand(sql, con);
-            adapter.InsertCommand.ExecuteNonQuery();
+            string connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_05\\App_Data\\Database1.mdf;Integrated Security=True";
 
-            command.Dispose();
-            con.Close();
-            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados inseridos com sucesso');window.location ='Listar.aspx';", true);
+            try
+            {
+                using (SqlConnection con = new SqlConnection(connetionString))
+                {
+                    con.Open();
 
+                    string sql = "INSERT INTO motos(matricula, proprietario, marca, modelo, cilindrada, foto) VALUES(@matricula, @proprietario, @marca, @modelo, @cilindrada, @foto)";
+
+                    using (SqlCommand command = new SqlCommand(sql, con))
+                    {
+                        command.Parameters.AddWithValue("@matricula", txt_matricula.Text);
+                        command.Parameters.AddWithValue("@proprietario", txt_proprietario.Text);
+                        command.Parameters.AddWithValue("@marca", txt_marca.Text);
+                        command.Parameters.AddWithValue("@modelo", txt_modelo.Text);
+                        command.Parameters.AddWithValue("@cilindrada", txt_cilindrada.Text);
+                        command.Parameters.AddWithValue("@foto", txt_foto.Text);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados inseridos com sucesso');window.location ='Listar.aspx';", true);
+                }
+            }
+            catch (Exception ex)
+            {
+       
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Erro", $"alert('Erro ao inserir dados: {ex.Message}');", true);
+
+            }
         }
 
         protected void bt_voltar_Click(object sender, EventArgs e)
         {
-            Server.Transfer("Index.aspx"); 
+            Response.Redirect("Index.aspx");
         }
     }
-
 }
 
 #-------------------------------------------------------------------------------------
