@@ -8,16 +8,23 @@ INDEX.ASPX
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
      <style>
-    /* Adicione estilos aqui */
     body {
         background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
-        background-size: cover; /* Garante que a imagem cobrirá todo o fundo */
+        background-size: cover; 
         background-repeat: no-repeat;
-        background-attachment: fixed; /* Fixa a imagem para que o fundo não role com a página */
+        background-attachment: fixed; 
+    }
+    h1, h2, p{
+    text-align: center;
+    color: cornflowerblue;
+    font-weight: bold;
+    }
+    p b {
+    font-weight: bold;
     }
     </style>
 
-   <main aria-labelledby="title" style="text-align: center; background-image: url(''); background-size: cover; background-position: center; height: 100%;">
+   <main aria-labelledby="title" font-weight: bold; style="text-align: center; background-image: url(''); background-size: cover; background-position: center; height: 100%;">
         <section aria-labelledby="aspnetTitle">
             <h1 id="aspnetTitle"><i><b>Aplicação Gestão de Alunos</b></i></h1>
             <p class="lead"><i><b>Esta aplicação ASP.NET é uma aplicação Web que utiliza bases de dados SQL com múltiplas tabelas, HTML, CSS, and Javascript.</b></i></p>
@@ -87,21 +94,28 @@ LISTAR.ASPX
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
 
      <style>
-        /* Adicione estilos aqui */
         body {
             background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
-            background-size: cover; /* Garante que a imagem cobrirá todo o fundo */
+            background-size: cover; 
             background-repeat: no-repeat;
-            background-attachment: fixed; /* Fixa a imagem para que o fundo não role com a página */
+            background-attachment: fixed; 
         }
-    </style>
 
+        h2 {
+            text-align: center;
+            color: cornflowerblue;
+        }
+
+    </style>
     <main aria-labelledby="title">
-        <h2 id="title"><%: Title %>.</h2>
+        <h2 id="Lista de Alunos Cadastrados"><%: Title %>.</h2>
         <br /><br />
         <div>
             <% display_data(); %>
-            <asp:Button ID="b_backbutton" runat="server" Text="VOLTAR" Height="25px" OnClick="b_backbutton_Click" Width="117px" />
+          <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='lightblue'" />
         </div>
     </main>
 </asp:Content>
@@ -121,7 +135,6 @@ namespace ex_06
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
 
         protected void display_data()
@@ -142,16 +155,15 @@ namespace ex_06
             command = new SqlCommand(sql, conn);
             data_reader = command.ExecuteReader();
 
-            // Adicionando estilos diretamente aqui
             Response.Write("<table style='width: 100%; border-collapse: collapse; margin-bottom: 20px;' class='table table-striped table-bordered table-hover'>");
             Response.Write("<thead style='background-color: #007bff; color: #ffffff;' class='thead-dark'><tr>");
-            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>ID</th>");
-            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Nome</th>");
-            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Email</th>");
-            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Gênero</th>");
-            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Data Nascimento</th>");
-            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Matrícula</th>");
-            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Turma</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>ID</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Nome</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Email</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Gênero</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Data Nascimento</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Matrícula</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Turma</th>");
             Response.Write("</tr></thead>");
             Response.Write("<tbody>");
 
@@ -190,30 +202,132 @@ INSERIR.ASPX
 <%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="inserir.aspx.cs" Inherits="ex_06.inserir" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <main aria-labelledby="title">
-        <h2>Inserir Dados</h2>
+    <style>
+        body 
+        {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main 
+        {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 
+        {
+            color: cornflowerblue;
+        }
+
+        label 
+        {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: cornflowerblue;
+        }
+
+        input, select 
+        {
+            margin: 5px 0;
+            border: 5px solid cornflowerblue;
+            height: 40px;
+            width: 400px;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        dropdownlist 
+        {
+            width: 100px;
+        }
+
+        select 
+        {
+            padding: 4px; 
+            font-size: 16px; 
+            color: cornflowerblue; 
+            border: 5px solid cornflowerblue; 
+            background-color: white; 
+        }
+
+        select::-ms-expand,
+        {
+            display: none; 
+        }
+
+        button:hover 
+        {
+            background-color: royalblue;
+        }
+        .label-container 
+        {
+        background-color: lightcyan; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 3px solid cornflowerblue; 
+        }
+    </style>
+
+    <main aria-labelledby="Cadastrar Aluno">
+        <div class="label-container">
+        <label for="txt_nome">Nome</label>
+        <asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="txt_email">Email</label>
+        <asp:TextBox ID="txt_email" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="txt_data_nasc">Data Nascimento</label>
+        <asp:TextBox ID="txt_data_nasc" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="txt_morada">Morada</label>
+        <asp:TextBox ID="txt_morada" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="dd_genero">Gênero</label>
+        <asp:DropDownList ID="dd_genero" runat="server"></asp:DropDownList>
+    </div>
+
+    <div class="label-container">
+        <label for="dd_turma">Turma</label>
+        <asp:DropDownList ID="dd_turma" runat="server"></asp:DropDownList>
+    </div>
+
+    <br />
+
         <br />
-        <asp:Label ID="lbl_nome" runat="server" Text="Nome: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_email" runat="server" Text="Email: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_email" runat="server"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_data_nasc" runat="server" Text="Data Nascimento:  "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_data_nasc" runat="server"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_morada" runat="server" Text="Morada: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_morada" runat="server"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_genero" runat="server" Text="Genero: "></asp:Label>
-        &nbsp;<asp:DropDownList ID="dd_genero" runat="server"></asp:DropDownList>
-        <br />
-        <asp:Label ID="lbl_turma" runat="server" Text="Turma: "></asp:Label>
-        &nbsp;<asp:DropDownList ID="dd_turma" runat="server"></asp:DropDownList>
-        <br />
-        <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="bt_inserir_Click" Height="23px"/>
+        <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="bt_inserir_Click" Height="50px" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer;
+           transition: background-color 0.3s;"
+    onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='lightblue'" />
+        <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='lightblue'" />
+
     </main>
 </asp:Content>
+
 
 #----------------------------------------------------------------  
 #----------------------------------------------------------------  
@@ -293,6 +407,11 @@ namespace ex_06
             con.Close();
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados inseridos com sucesso');window.location = 'Listagem.aspx'", true);
         }
+
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Index.aspx");
+        }
     }
 }
 
@@ -304,6 +423,57 @@ GERIR.ASPX
 <%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="gerir.aspx.cs" Inherits="ex_06.gerir" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .btn-container 
+        {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .btnEdit,
+        .btnDelete 
+        {
+            background-color: lightblue;
+            color: blue;
+            border: 2px solid blue;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 130px;
+        }
+
+        .btnEdit:hover,
+        .btnDelete:hover 
+        {
+            background-color: skyblue;
+        }
+
+        main 
+        {
+            text-align: center;
+            margin-top: 50px; /* Ajuste conforme necessário */
+        }
+
+        th,
+        td 
+        {
+            text-align: center;
+            margin-top: 10px;
+            border: 2px solid #dee2e6;
+            padding: 10px;
+        }
+
+    </style>
+
     <main aria-labelledby="title">
         <h2>Gerir Alunos</h2>
         <br />
@@ -311,16 +481,14 @@ GERIR.ASPX
     </main>
 </asp:Content>
 
+
 #----------------------------------------------------------------  
 #----------------------------------------------------------------  
 #----------------------------------------------------------------  
 GERIR.ASPX.CS
 
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -330,7 +498,6 @@ namespace ex_06
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
 
         protected void Obter_dados()
@@ -345,41 +512,77 @@ namespace ex_06
             SqlDataReader dataReader;
             String sql, Output = " ";
             sql = "SELECT * FROM t_aluno, t_genero, t_turma " +
-      "WHERE genero_id = t_genero.id AND turma_id = t_turma.id";
+                  "WHERE genero_id = t_genero.id AND turma_id = t_turma.id";
             command = new SqlCommand(sql, con);
             dataReader = command.ExecuteReader();
 
-            Response.Write("<table border='1'>");
-            Response.Write("<tr>");
-            Response.Write("<th>ID</th>");
-            Response.Write("<th>Nome</th>");
-            Response.Write("<th>Email</th>");
-            Response.Write("<th>Data Nasc.</th>");
-            Response.Write("<th>Morada</th>");
-            Response.Write("<th>Genero</th>");
-            Response.Write("<th>Turma</th>");
-            Response.Write("</tr>");
+            Response.Write("<table style='width: 100%; border-collapse: collapse; margin-bottom: 20px;' class='table table-striped table-bordered table-hover'>");
+            Response.Write("<thead style='background-color: #007bff; color: #ffffff;' class='thead-dark'><tr>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>ID</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Nome</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Email</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Gênero</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Data Nascimento</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Matrícula</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Turma</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Editar/Eliminar</th>");
+            Response.Write("</tr></thead>");
+            Response.Write("<tbody>");
 
             while (dataReader.Read())
             {
                 Response.Write("<tr>");
-                Response.Write("<td>" + dataReader.GetValue(0) + "</td>");
-                Response.Write("<td>" + dataReader.GetValue(1) + "</td>");
-                Response.Write("<td>" + dataReader.GetValue(2) + "</td>");
-                Response.Write("<td>" + dataReader.GetValue(3) + "</td>");
-                Response.Write("<td>" + dataReader.GetValue(4) + "</td>");
-                Response.Write("<td>" + dataReader.GetValue(8) + "</td>");
-                Response.Write("<td>" + dataReader.GetValue(10) + "</td>");
-                Response.Write("<td>");
-                Response.Write("<input type='button' value='Editar' onclick=\"window.open('editar.aspx?id=" + dataReader.GetValue(0) + "')\" />");
-                Response.Write("<input type='button' value='Eliminar' onclick=\"window.open('eliminar.aspx?id=" + dataReader.GetValue(0) + "')\" />");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6; vertical-align: middle;'>" + dataReader.GetValue(0) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6; vertical-align: middle;'>" + dataReader.GetValue(1) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6; vertical-align: middle;'>" + dataReader.GetValue(2) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6; vertical-align: middle;'>" + dataReader.GetValue(3) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6; vertical-align: middle;'>" + dataReader.GetValue(4) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6; vertical-align: middle;'>" + dataReader.GetValue(8) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6; vertical-align: middle;'>" + dataReader.GetValue(10) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6; vertical-align: middle;'>");
+
+                // Adicionando botões "Editar" e "Eliminar"
+                Button btnEditar = new Button();
+                btnEditar.Text = "Editar";
+                btnEditar.CssClass = "btnEdit";
+                btnEditar.Attributes.Add("onclick", "window.open('editar.aspx?id=" + dataReader.GetValue(0) + "')");
+                Response.Write(RenderControlAsString(btnEditar));
+
+                Button btnEliminar = new Button();
+                btnEliminar.Text = "Eliminar";
+                btnEliminar.CssClass = "btnDelete";
+                btnEliminar.Attributes.Add("onclick", "window.open('eliminar.aspx?id=" + dataReader.GetValue(0) + "')");
+                Response.Write(RenderControlAsString(btnEliminar));
+
                 Response.Write("</td>");
                 Response.Write("</tr>");
             }
+
+            Response.Write("</tbody>");
+            Response.Write("</table>");
+
+            dataReader.Close();
+            con.Close();
         }
 
-    }
+        private string RenderControlAsString(Control control)
+        {
+            using (System.IO.StringWriter sw = new System.IO.StringWriter())
+            {
+                using (HtmlTextWriter hw = new HtmlTextWriter(sw))
+                {
+                    control.RenderControl(hw);
+                    return sw.ToString();
+                }
+            }
+        }
 
+
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Index.aspx");
+        }
+    }
 }
 
 #----------------------------------------------------------------  
@@ -390,31 +593,86 @@ EDITAR.ASPX
 <%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="editar.aspx.cs" Inherits="ex_06.editar" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: cornflowerblue;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: cornflowerblue;
+        }
+
+        input, select {
+            margin: 5px 0;
+            border: 5px solid cornflowerblue;
+            width: 300px; /* Ajuste a largura conforme necessário */
+            padding: 1px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+            height: 40px;
+            width: 400px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+    </style>
+
     <main aria-labelledby="title">
         <h2>Inserir Dados</h2>
-         <br />
-         <asp:Label ID="lbl_numero" runat="server" Text="Número: "></asp:Label>
-         &nbsp;<asp:TextBox ID="txt_numero" runat="server" ReadOnly="true"></asp:TextBox>
-         <br />
-        <asp:Label ID="lbl_nome" runat="server" Text="Nome: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
+
+        <label for="txt_numero">Número</label>
+        <asp:TextBox ID="txt_numero" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <label for="txt_nome">Nome</label>
+        <asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
+
+        <label for="txt_email">Email</label>
+        <asp:TextBox ID="txt_email" runat="server"></asp:TextBox>
+
+        <label for="txt_data_nasc">Data Nascimento</label>
+        <asp:TextBox ID="txt_data_nasc" runat="server"></asp:TextBox>
+
+        <label for="txt_morada">Morada</label>
+        <asp:TextBox ID="txt_morada" runat="server"></asp:TextBox>
+
+        <label for="dd_genero">Gênero</label>
+        <asp:DropDownList ID="dd_genero" runat="server"></asp:DropDownList>
+
+        <label for="dd_turma">Turma</label>
+        <asp:DropDownList ID="dd_turma" runat="server"></asp:DropDownList>
+
         <br />
-        <asp:Label ID="lbl_email" runat="server" Text="Email: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_email" runat="server"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_data_nasc" runat="server" Text="Data Nascimento:  "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_data_nasc" runat="server"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_morada" runat="server" Text="Morada: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_morada" runat="server"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_genero" runat="server" Text="Genero: "></asp:Label>
-        &nbsp;<asp:DropDownList ID="dd_genero" runat="server"></asp:DropDownList>
-        <br />
-        <asp:Label ID="lbl_turma" runat="server" Text="Turma: "></asp:Label>
-        &nbsp;<asp:DropDownList ID="dd_turma" runat="server"></asp:DropDownList>
-        <br />
-        <asp:Button ID="b_alterar_click" runat="server" Text="Alterar" OnClick="bt_alterar_Click" Height="23px"/>
+       <asp:Button ID="b_alterar_click" runat="server" Text="Alterar" OnClick="bt_alterar_Click" Height="50px" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='lightblue'" />
+
     </main>
 </asp:Content>
 
@@ -545,31 +803,99 @@ ELIMINAR.ASPX
 <%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar.aspx.cs" Inherits="ex_06.eliminar" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <main aria-labelledby="title">
-        <h2>Inserir Dados</h2>
-         <br />
-         <asp:Label ID="lbl_numero" runat="server" Text="Número: "></asp:Label>
-         &nbsp;<asp:TextBox ID="txt_numero" runat="server" ReadOnly="true"></asp:TextBox>
-         <br />
-        <asp:Label ID="lbl_nome" runat="server" Text="Nome: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_nome" runat="server" ReadOnly="true"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_email" runat="server" Text="Email: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_email" runat="server" ReadOnly="true"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_data_nasc" runat="server" Text="Data Nascimento:  "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_data_nasc" runat="server" ReadOnly="true"> </asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_morada" runat="server" Text="Morada: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_morada" runat="server" ReadOnly="true"></asp:TextBox>
-        <br />
-        <asp:Label ID="lbl_genero" runat="server" Text="Genero: "></asp:Label>
-        &nbsp;<asp:DropDownList ID="dd_genero" runat="server" ReadOnly="true"></asp:DropDownList>
-        <br />
-        <asp:Label ID="lbl_turma" runat="server" Text="Turma: "></asp:Label>
-        &nbsp;<asp:DropDownList ID="dd_turma" runat="server" ReadOnly="true"></asp:DropDownList>
-        <br />
-        <asp:Button ID="b_eliminar_click" runat="server" Text="Eliminar" OnClick="bt_eliminar_Click" Height="23px"/>
+    <style>
+        body {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: cornflowerblue;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: cornflowerblue;
+        }
+
+        input {
+            margin: 5px 0;
+            border: 5px solid cornflowerblue;
+            width: 300px; /* Ajuste a largura conforme necessário */
+            height: 40px;
+            padding: 8px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+
+        select {
+            width: 300px; /* Ajuste a largura conforme necessário */
+            padding: 1px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+            color: cornflowerblue; /* Cor do texto na lista suspensa */
+            border: 5px solid cornflowerblue; /* Adicione uma borda personalizada */
+            background-color: white; /* Cor de fundo da lista suspensa */
+            height: 40px;
+        }
+
+        /* Estilo para a seta na lista suspensa (opcional) */
+        select::-ms-expand,
+        select::-webkit-select-arrow {
+            display: none; /* Esconde a seta padrão */
+    </style>
+
+    <main aria-labelledby="Remover Aluno">
+        <h2>Remover Aluno</h2>
+        <br /><br />
+        <label for="txt_numero">Número</label>
+        <asp:TextBox ID="txt_numero" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <label for="txt_nome">Nome</label>
+        <asp:TextBox ID="txt_nome" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <label for="txt_email">Email</label>
+        <asp:TextBox ID="txt_email" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <label for="txt_data_nasc">Data Nascimento</label>
+        <asp:TextBox ID="txt_data_nasc" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <label for="txt_morada">Morada</label>
+        <asp:TextBox ID="txt_morada" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <label for="dd_genero">Gênero</label>
+        <asp:DropDownList ID="dd_genero" runat="server" ReadOnly="true"></asp:DropDownList>
+
+        <label for="dd_turma">Turma</label>
+        <asp:DropDownList ID="dd_turma" runat="server" ReadOnly="true"></asp:DropDownList>
+
+        <br /><br />
+        <asp:Button ID="b_eliminar_click" runat="server" Text="Eliminar" OnClick="bt_eliminar_Click" Height="50px" Width="200px" 
+            style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer;
+            transition: background-color 0.3s;"
+            onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='lightblue'" />
     </main>
 </asp:Content>
 
@@ -697,18 +1023,62 @@ TURMAS.ASPX
 <%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="turmas.aspx.cs" Inherits="ex_06.turmas" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: cornflowerblue;
+        }
+
+        input, label {
+            display: block;
+            margin: 10px auto; /* Adicionado para centralizar a TextBox e a Label */
+            text-align: center;
+            color: black;
+        }
+
+        label {
+            font-size: 20px; /* Tamanho da fonte da Label ajustado */
+        }
+
+        main {
+            text-align: center;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 200px;
+            height: 40px;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+    </style>
+
     <main aria-labelledby="title">
-
-       <h2>Gerir Turmas</h2>
-       <br /><br />
+        <h2>Gerir Turmas</h2>
+        <br /><br />
         <% Obter_dados(); %>
-       <br /><br />
-       <h3>Adicionar Turmas</h3> 
-       <asp:Label ID="lbl_turma" runat="server" Text="Turma: "></asp:Label>
-       &nbsp;<asp:TextBox ID="txt_turma" runat="server"></asp:TextBox>
-       <br /><br />
-       <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="b_inserir_Click" Height="23px"/>
-
+        <br /><br />
+        <h3>Adicionar Turma</h3>
+        &nbsp;<asp:TextBox ID="txt_turma" runat="server"></asp:TextBox>
+        <br /><br />
+        <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="b_inserir_Click" Height="23px"
+            style="text-align: center; width: 200px; height: 50px;  margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer;
+               transition: background-color 0.3s;" />
     </main>
 </asp:Content>
 
@@ -717,14 +1087,9 @@ TURMAS.ASPX
 #----------------------------------------------------------------  
 TURMAS.ASPX.CS
 
-using Microsoft.SqlServer.Server;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace ex_06
 {
@@ -737,34 +1102,43 @@ namespace ex_06
 
         protected void Obter_dados()
         {
-            string connectionString;
-            SqlConnection con;
-            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
-            con = new SqlConnection(connectionString);
-            con.Open();
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
 
-            SqlCommand command;
-            SqlDataReader dataReader;
-            String sql, Output = " ";
-            sql = "Select * from t_turma";
-
-            Output = Output + "<table border='1'> <tr><th>ID</th><th>Turma</th><th>Ação</th></tr>";
-            command = new SqlCommand(sql, con);
-            dataReader = command.ExecuteReader();
-            while (dataReader.Read())
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                Output = Output + "<tr><td>" + dataReader.GetValue(0) + "</td><td>" + dataReader.GetValue(1) +
-                    "</td><td><a href='eliminar_t.aspx?id=" + dataReader.GetValue(0) + "' target=' _self'>Eliminar</a></td></tr>";
-            }
+                con.Open();
 
-            Response.Write(Output + "</table>");
-            dataReader.Close();
-            con.Close();
+                SqlCommand command = new SqlCommand("SELECT * FROM t_turma", con);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                Response.Write("<div style='overflow-x:auto;'>");
+                Response.Write("<table class='table table-striped table-bordered table-hover'>");
+                Response.Write("<thead style='background-color: #007bff; color: #ffffff;' class='thead-dark'><tr>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>ID</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Turma</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Ação</th>");
+                Response.Write("</tr></thead>");
+                Response.Write("<tbody>");
+
+                while (dataReader.Read())
+                {
+                    Response.Write("<tr>");
+                    Response.Write("<td class='text-center table-cell'>" + dataReader.GetValue(0) + "</td>");
+                    Response.Write("<td class='text-center table-cell'>" + dataReader.GetValue(1) + "</td>");
+                    Response.Write("<td class='text-center table-cell'><a href='eliminar_t.aspx?id=" + dataReader.GetValue(0) + "' class='btnDelete'>Eliminar</a></td>");
+                    Response.Write("</tr>");
+                }
+
+                Response.Write("</tbody></table></div>");
+
+                dataReader.Close();
+            }
         }
+
 
         protected void b_inserir_Click(object sender, EventArgs e)
         {
-            string connetionString = "Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            string connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connetionString))
             {
                 con.Open();
@@ -782,13 +1156,10 @@ namespace ex_06
                 command.Dispose();
                 con.Close();
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
-                    "alert('Dados alterados com sucesso');window.location=listar.aspx;", true);
+                    "alert('Dados alterados com sucesso');window.location='listar.aspx';", true);
             }
-
         }
-
     }
-
 }
 
 #----------------------------------------------------------------  
@@ -799,15 +1170,85 @@ ELIMINAR_T.ASPX
 <%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar_t.aspx.cs" Inherits="ex_06.eliminar_t" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <main aria-labelledby="title">
-         <h2>Remover Turmas</h2>
-         <br /><br />
-         <asp:Label ID="lbl_numero" runat="server" Text="Id: "></asp:Label>
-         &nbsp;<asp:TextBox ID="txt_id" runat="server" ReadOnly="true"></asp:TextBox>
-         <br /><br />
-         <asp:Label ID="nome" runat="server" Text="Nome: "></asp:Label>
-         &nbsp;<asp:TextBox ID="txt_turma" runat="server" ReadOnly="true"></asp:TextBox>
-         <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click" Height="23px"/>
+    <style>
+        body {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: cornflowerblue;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: cornflowerblue;
+        }
+
+        input {
+            margin: 5px 0;
+            border: 5px solid cornflowerblue;
+            width: 300px; /* Ajuste a largura conforme necessário */
+            height: 40px;
+            padding: 8px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+
+        select {
+            width: 300px; /* Ajuste a largura conforme necessário */
+            padding: 1px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+            color: cornflowerblue; /* Cor do texto na lista suspensa */
+            border: 5px solid cornflowerblue; /* Adicione uma borda personalizada */
+            background-color: white; /* Cor de fundo da lista suspensa */
+            height: 40px;
+        }
+
+        /* Estilo para a seta na lista suspensa (opcional) */
+        select::-ms-expand,
+        select::-webkit-select-arrow {
+            display: none; /* Esconde a seta padrão */
+        }
+    </style>
+
+    <main aria-labelledby="Remover Turmas">
+        <h2>Remover Turmas</h2>
+        <br /><br />
+        <label for="txt_id">Id: </label>
+        <asp:TextBox ID="txt_id" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <label for="txt_turma">Nome: </label>
+        <asp:TextBox ID="txt_turma" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <br /><br />
+        <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click" Height="50px" Width="200px" 
+            style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer;
+            transition: background-color 0.3s;"
+            onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='lightblue'" />
     </main>
 </asp:Content>
 
@@ -890,17 +1331,91 @@ GENEROS.ASPX
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <main aria-labelledby="title">
-      
-       <h2>Gerir Gêneros</h2>
-       <br /><br />
-        <% Obter_dados(); %>
-       <br /><br />
-       <h3>Adicionar Gêneros</h3> 
-       <asp:Label ID="lbl_genero" runat="server" Text="Turma: "></asp:Label>
-       &nbsp;<asp:TextBox ID="txt_genero" runat="server"></asp:TextBox>
-       <br /><br />
-       <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="b_inserir_Click" Height="23px"/>
+        <style>
+            body {
+                background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
 
+            h2, h3 {
+                text-align: center;
+                color: cornflowerblue;
+            }
+
+            input, label {
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+                color: black;
+            }
+
+            label {
+                font-size: 20px;
+            }
+
+            main {
+                text-align: center;
+            }
+
+            .container {
+                max-width: 800px; /* Ajuste conforme necessário */
+                margin: 0 auto;
+            }
+
+            .row {
+                margin-bottom: 20px;
+            }
+
+            .button-container {
+                text-align: center;
+            }
+
+            button {
+                padding: 10px 20px;
+                background-color: lightblue;
+                color: white;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                width: 200px;
+                height: 40px;
+            }
+
+            button:hover {
+                background-color: skyblue;
+            }
+        </style>
+
+        <div class="container">
+            <h2>Gerir Gêneros</h2>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <% Obter_dados(); %>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Adicionar Gênero</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <asp:TextBox ID="txt_genero" runat="server" CssClass="form-control" placeholder="Gênero"></asp:TextBox>
+                </div>
+            </div>
+
+           <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="b_inserir_Click" CssClass="btn btn-primary"
+    style="text-align: center; width: 200px; height: 50px; margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='skyblue'"
+    onmouseout="this.style.backgroundColor='lightblue'" />
+                </div>
+            </div>
+        </div>
     </main>
 </asp:Content>
 
@@ -910,12 +1425,8 @@ GENEROS.ASPX
 GENEROS.ASPX.CS
 
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
 
 namespace ex_06
 {
@@ -925,38 +1436,44 @@ namespace ex_06
         {
 
         }
-
         protected void Obter_dados()
         {
-            string connectionString;
-            SqlConnection con;
-            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
-            con = new SqlConnection(connectionString);
-            con.Open();
-
-            SqlCommand command;
-            SqlDataReader dataReader;
-            String sql, Output = " ";
-            sql = "Select * from t_genero";
-
-            Output = Output + "<table border='1'> <tr><th>ID</th><th>Turma</th><th>Ação</th></tr>";
-            command = new SqlCommand(sql, con);
-            dataReader = command.ExecuteReader();
-            while (dataReader.Read())
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connectionString))
             {
-                Output = Output + "<tr><td>" + dataReader.GetValue(0) + "</td><td>" + dataReader.GetValue(1) +
-                    "</td><td><a href='eliminar_g.aspx?id=" + dataReader.GetValue(0) + "' target=' _self'>Eliminar</a></td></tr>";
-            }
+                con.Open();
 
-            Response.Write(Output + "</table>");
-            dataReader.Close();
-            con.Close();
+                SqlCommand command = new SqlCommand("SELECT * FROM t_genero", con);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                Response.Write("<div style='overflow-x:auto;'>");
+                Response.Write("<table class='table table-striped table-bordered table-hover'>");
+                Response.Write("<thead style='background-color: #007bff; color: #ffffff;' class='thead-dark'><tr>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>ID</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Gênero</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Ação</th>");
+                Response.Write("</tr></thead>");
+                Response.Write("<tbody>");
+
+                while (dataReader.Read())
+                {
+                    Response.Write("<tr>");
+                    Response.Write("<td class='text-center table-cell'>" + dataReader.GetValue(0) + "</td>");
+                    Response.Write("<td class='text-center table-cell'>" + dataReader.GetValue(1) + "</td>");
+                    Response.Write("<td class='text-center table-cell'><a href='eliminar_t.aspx?id=" + dataReader.GetValue(0) + "' class='btnDelete'>Eliminar</a></td>");
+                    Response.Write("</tr>");
+                }
+
+                Response.Write("</tbody></table></div>");
+
+                dataReader.Close();
+            }
         }
+
 
         protected void b_inserir_Click(object sender, EventArgs e)
         {
-
-            string connetionString = "Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            string connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connetionString))
             {
                 con.Open();
@@ -975,13 +1492,9 @@ namespace ex_06
                 con.Close();
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
                     "alert('Dados inseridos com sucesso');window.location=generos.aspx;", true);
-
             }
-
         }
-
     }
-
 }
 
 #----------------------------------------------------------------  
@@ -992,15 +1505,75 @@ ELIMINAR_G.ASPX
 <%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar_g.aspx.cs" Inherits="ex_06.eliminar_g" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: cornflowerblue;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 25px;   
+            color: cornflowerblue;
+        }
+
+        input, select {
+            border: 5px solid cornflowerblue;
+            width: 300px;
+            height: 40px;
+            padding: 8px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+    </style>
+
     <main aria-labelledby="title">
-        <h2>Remover Turmas</h2>
+        <h2>Remover Gênero</h2>
         <br /><br />
-        <asp:Label ID="lbl_numero" runat="server" Text="Id: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_id" runat="server" ReadOnly="true"></asp:TextBox>
-        <br /><br />
-        <asp:Label ID="nome" runat="server" Text="Nome: "></asp:Label>
-        &nbsp;<asp:TextBox ID="txt_genero" runat="server" ReadOnly="true"></asp:TextBox>
-        <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click" Height="23px"/>
+        <div class="form-group">
+            <label for="txt_id">Id: </label>
+            <asp:TextBox ID="txt_id" runat="server" ReadOnly="true"></asp:TextBox>
+        </div>
+
+        <div class="form-group">
+            <label for="txt_genero">Nome: </label>
+            <asp:TextBox ID="txt_genero" runat="server" ReadOnly="true"></asp:TextBox>
+        </div>
+
+        <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click" CssClass="btn btn-primary"
+            style="text-align: center; width: 200px; height: 50px; margin-left: auto; margin-right: auto; display: block; background-color: lightblue; color: white; border: 1px solid #ccc; padding: 10px; cursor: pointer;
+            transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='lightblue'" />
     </main>
 </asp:Content>
 
@@ -1155,4 +1728,3 @@ SITE MASTER
 #----------------------------------------------------------------  
 #----------------------------------------------------------------  
 #----------------------------------------------------------------  
-SITE MASTER
