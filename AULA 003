@@ -1,0 +1,1158 @@
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INDEX.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="ex_06.index" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+     <style>
+    /* Adicione estilos aqui */
+    body {
+        background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+        background-size: cover; /* Garante que a imagem cobrirá todo o fundo */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Fixa a imagem para que o fundo não role com a página */
+    }
+    </style>
+
+   <main aria-labelledby="title" style="text-align: center; background-image: url(''); background-size: cover; background-position: center; height: 100%;">
+        <section aria-labelledby="aspnetTitle">
+            <h1 id="aspnetTitle"><i><b>Aplicação Gestão de Alunos</b></i></h1>
+            <p class="lead"><i><b>Esta aplicação ASP.NET é uma aplicação Web que utiliza bases de dados SQL com múltiplas tabelas, HTML, CSS, and Javascript.</b></i></p>
+        </section>
+
+        <p style="text-align: center;">
+            <img src="https://simulare.com.br/wp-content/uploads/182474-como-a-gestao-de-sala-de-aula-pode-melhorar-o-engajamento-dos-alunos.jpg" width="700" />
+        </p>
+
+        <section aria-labelledby="gettingStartedTitle">
+            <h2 id="gettingStartedTitle"><i><b>Gestão de Alunos</b></i></h2>
+            <p><i><b>A gestão de alunos é composta por um formulário que contém uma listagem simples, um formulário para inserir dados e outro formulário que permite gerir (ou seja, editar e eliminar alunos).</b></i></p>
+            <p style="text-align: center;">
+                <img src="https://i1.wp.com/horario.com.br/wp-content/uploads/2019/12/04_geha_blog_gestao_sala_de_aula.jpg?fit=1923%2C1080&ssl=1" width="700" />
+            </p>
+        </section>
+
+        <section aria-labelledby="librariesTitle">
+            <h2 id="librariesTitle"><i><b>Gestão de Turmas</b></i></h2>
+            <p><i><b>A gestão de turmas permite visualizar as turmas existentes, bem como adicionar e apagar turmas.</b></i></p>
+            <p style="text-align: center;">
+                <img src="https://deltasge.com.br/site/wp-content/uploads/2019/04/cadastro-materias-nas-turmas.png" width="700" />
+            </p>
+        </section>
+
+        <section aria-labelledby="hostingTitle">
+            <h2 id="hostingTitle"><i><b>Gestão de Gêneros</b></i></h2>
+            <p><i><b>A gestão de gêneros permite visualizar os gêneros existentes, bem como adicionar e apagar gêneros.</b></i></p>
+            <p style="text-align: center;">
+                <img src="https://iho.int/uploads/default/i/m/img641c4b54a49b6.png" width="700" />
+            </p>
+        </section>
+    </main>
+
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INDEX.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class index : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+LISTAR.ASPX
+
+<%@ Page Title="Alunos Cadastrados" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="listar.aspx.cs" Inherits="ex_06.listar" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+     <style>
+        /* Adicione estilos aqui */
+        body {
+            background-image: url('https://wallpaper-mania.com/wp-content/uploads/2018/09/High_resolution_wallpaper_background_ID_77701337028.jpg');
+            background-size: cover; /* Garante que a imagem cobrirá todo o fundo */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Fixa a imagem para que o fundo não role com a página */
+        }
+    </style>
+
+    <main aria-labelledby="title">
+        <h2 id="title"><%: Title %>.</h2>
+        <br /><br />
+        <div>
+            <% display_data(); %>
+            <asp:Button ID="b_backbutton" runat="server" Text="VOLTAR" Height="25px" OnClick="b_backbutton_Click" Width="117px" />
+        </div>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+LISTAR.ASPX.CS
+
+using System;
+using System.Data.SqlClient;
+using System.Web.UI;
+
+namespace ex_06
+{
+    public partial class listar : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void display_data()
+        {
+            string connection_string;
+            SqlConnection conn;
+
+            connection_string = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            conn = new SqlConnection(connection_string);
+            conn.Open();
+
+            SqlCommand command;
+            SqlDataReader data_reader;
+
+            String sql;
+            sql = "Select * from t_aluno, t_genero, t_turma where genero_id = t_genero.id and turma_id = t_turma.id";
+
+            command = new SqlCommand(sql, conn);
+            data_reader = command.ExecuteReader();
+
+            // Adicionando estilos diretamente aqui
+            Response.Write("<table style='width: 100%; border-collapse: collapse; margin-bottom: 20px;' class='table table-striped table-bordered table-hover'>");
+            Response.Write("<thead style='background-color: #007bff; color: #ffffff;' class='thead-dark'><tr>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>ID</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Nome</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Email</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Gênero</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Data Nascimento</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Matrícula</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 2px solid #dee2e6;'>Turma</th>");
+            Response.Write("</tr></thead>");
+            Response.Write("<tbody>");
+
+            while (data_reader.Read())
+            {
+                Response.Write("<tr>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6;'>" + data_reader.GetValue(0) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6;'>" + data_reader.GetValue(1) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6;'>" + data_reader.GetValue(2) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6;'>" + data_reader.GetValue(3) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6;'>" + data_reader.GetValue(4) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6;'>" + data_reader.GetValue(8) + "</td>");
+                Response.Write("<td style='text-align: center; width: 15%; border: 2px solid #dee2e6;'>" + data_reader.GetValue(10) + "</td>");
+                Response.Write("</tr>");
+            }
+
+            Response.Write("</tbody>");
+            Response.Write("</table>");
+
+            data_reader.Close();
+            conn.Close();
+        }
+
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Index.aspx");
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INSERIR.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="inserir.aspx.cs" Inherits="ex_06.inserir" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+        <h2>Inserir Dados</h2>
+        <br />
+        <asp:Label ID="lbl_nome" runat="server" Text="Nome: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_email" runat="server" Text="Email: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_email" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_data_nasc" runat="server" Text="Data Nascimento:  "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_data_nasc" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_morada" runat="server" Text="Morada: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_morada" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_genero" runat="server" Text="Genero: "></asp:Label>
+        &nbsp;<asp:DropDownList ID="dd_genero" runat="server"></asp:DropDownList>
+        <br />
+        <asp:Label ID="lbl_turma" runat="server" Text="Turma: "></asp:Label>
+        &nbsp;<asp:DropDownList ID="dd_turma" runat="server"></asp:DropDownList>
+        <br />
+        <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="bt_inserir_Click" Height="23px"/>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INSERIR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class inserir : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            string connetionString;
+            SqlConnection con;
+            connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = " ";
+            sql = "Select * from t_genero";
+            String x;
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(0) + "";
+                dd_genero.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+            }
+            dataReader.Close();
+
+            sql = "Select * from t_turma";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(0) + "";
+                dd_turma.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+            }
+            Response.Write(Output);
+            dataReader.Close();
+            con.Close();
+        }
+        protected void bt_inserir_Click(object sender, EventArgs e)
+        {
+            string connetionString;
+            SqlConnection con;
+            connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            String sql = " ";
+
+            sql = "Insert into t_alunos(nome, email, data_nasc, morada, genero_id, turma_id) values ('" + txt_nome.Text + "', '" + txt_email.Text + "', '" + txt_data_nasc.Text + "', '" + txt_morada.Text + "', " + dd_genero.SelectedValue + ", " + dd_turma.SelectedValue + ")";
+
+            command = new SqlCommand(sql, con);
+            adapter.InsertCommand = new SqlCommand(sql, con);
+            adapter.InsertCommand.ExecuteNonQuery();
+
+            command.Dispose();
+            con.Close();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados inseridos com sucesso');window.location = 'Listagem.aspx'", true);
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+GERIR.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="gerir.aspx.cs" Inherits="ex_06.gerir" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+        <h2>Gerir Alunos</h2>
+        <br />
+        <% Obter_dados(); %>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+GERIR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class gerir : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Obter_dados()
+        {
+            string connetionString;
+            SqlConnection con;
+            connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = " ";
+            sql = "SELECT * FROM t_aluno, t_genero, t_turma " +
+      "WHERE genero_id = t_genero.id AND turma_id = t_turma.id";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+
+            Response.Write("<table border='1'>");
+            Response.Write("<tr>");
+            Response.Write("<th>ID</th>");
+            Response.Write("<th>Nome</th>");
+            Response.Write("<th>Email</th>");
+            Response.Write("<th>Data Nasc.</th>");
+            Response.Write("<th>Morada</th>");
+            Response.Write("<th>Genero</th>");
+            Response.Write("<th>Turma</th>");
+            Response.Write("</tr>");
+
+            while (dataReader.Read())
+            {
+                Response.Write("<tr>");
+                Response.Write("<td>" + dataReader.GetValue(0) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(1) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(2) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(3) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(4) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(8) + "</td>");
+                Response.Write("<td>" + dataReader.GetValue(10) + "</td>");
+                Response.Write("<td>");
+                Response.Write("<input type='button' value='Editar' onclick=\"window.open('editar.aspx?id=" + dataReader.GetValue(0) + "')\" />");
+                Response.Write("<input type='button' value='Eliminar' onclick=\"window.open('eliminar.aspx?id=" + dataReader.GetValue(0) + "')\" />");
+                Response.Write("</td>");
+                Response.Write("</tr>");
+            }
+        }
+
+    }
+
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="editar.aspx.cs" Inherits="ex_06.editar" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+        <h2>Inserir Dados</h2>
+         <br />
+         <asp:Label ID="lbl_numero" runat="server" Text="Número: "></asp:Label>
+         &nbsp;<asp:TextBox ID="txt_numero" runat="server" ReadOnly="true"></asp:TextBox>
+         <br />
+        <asp:Label ID="lbl_nome" runat="server" Text="Nome: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_email" runat="server" Text="Email: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_email" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_data_nasc" runat="server" Text="Data Nascimento:  "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_data_nasc" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_morada" runat="server" Text="Morada: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_morada" runat="server"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_genero" runat="server" Text="Genero: "></asp:Label>
+        &nbsp;<asp:DropDownList ID="dd_genero" runat="server"></asp:DropDownList>
+        <br />
+        <asp:Label ID="lbl_turma" runat="server" Text="Turma: "></asp:Label>
+        &nbsp;<asp:DropDownList ID="dd_turma" runat="server"></asp:DropDownList>
+        <br />
+        <asp:Button ID="b_alterar_click" runat="server" Text="Alterar" OnClick="bt_alterar_Click" Height="23px"/>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Security.AccessControl;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class editar : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+
+            string alunoId = Request.QueryString["id"];
+
+            if (!string.IsNullOrEmpty(alunoId) && int.TryParse(alunoId, out int id))
+            {
+                txt_numero.Text = alunoId;
+
+                string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
+
+                    // Carregar ddl_genero
+                    string sqlGenero = "Select * from t_genero";
+                    using (SqlCommand commandGenero = new SqlCommand(sqlGenero, con))
+                    {
+                        SqlDataReader dataReaderGenero = commandGenero.ExecuteReader();
+                        while (dataReaderGenero.Read())
+                        {
+                            string x = dataReaderGenero.GetValue(0).ToString();
+                            dd_genero.Items.Add(new ListItem(dataReaderGenero.GetValue(1).ToString(), x));
+                        }
+                        dataReaderGenero.Close();
+                    }
+
+                    // Carregar ddl_turma
+                    string sqlTurma = "Select * from t_turma";
+                    using (SqlCommand commandTurma = new SqlCommand(sqlTurma, con))
+                    {
+                        SqlDataReader dataReaderTurma = commandTurma.ExecuteReader();
+                        while (dataReaderTurma.Read())
+                        {
+                            string x = dataReaderTurma.GetValue(0).ToString();
+                            dd_turma.Items.Add(new ListItem(dataReaderTurma.GetValue(1).ToString(), x));
+                        }
+                        dataReaderTurma.Close();
+                    }
+
+                    // Carregar dados do aluno
+                    string sqlAluno = "Select * from t_aluno where numero = @alunoId";
+                    using (SqlCommand commandAluno = new SqlCommand(sqlAluno, con))
+                    {
+                        commandAluno.Parameters.AddWithValue("@alunoId", id);
+                        SqlDataReader dataReaderAluno = commandAluno.ExecuteReader();
+                        if (dataReaderAluno.Read())
+                        {
+                            txt_nome.Text = dataReaderAluno.GetValue(1).ToString();
+                            txt_email.Text = dataReaderAluno.GetValue(2).ToString();
+                            txt_data_nasc.Text = dataReaderAluno.GetValue(3).ToString();
+                            txt_morada.Text = dataReaderAluno.GetValue(4).ToString();
+                            dd_genero.SelectedValue = dataReaderAluno.GetValue(5).ToString();
+                            dd_turma.SelectedValue = dataReaderAluno.GetValue(6).ToString();
+                        }
+                        dataReaderAluno.Close();
+                    }
+
+                }
+
+            }
+
+        }
+
+        protected void bt_alterar_Click(object sender, EventArgs e)
+        {
+            string connetionString = "Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connetionString))
+            {
+                con.Open();
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "update t_aluno set nome='" + txt_nome.Text + "', email='" + txt_email.Text +
+      "', data_nasc='" + txt_data_nasc.Text + "', morada='" + txt_morada.Text + "', genero_id=" + dd_genero.SelectedValue +
+      ", turma_id=" + dd_turma.SelectedValue + " where numero=" + txt_numero.Text;
+
+                command = new SqlCommand(sql, con);
+                adapter.InsertCommand = new SqlCommand(sql, con);
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
+                    "alert('Dados alterados com sucesso');window.location=listar.aspx;", true);             
+
+            }     
+
+        }
+
+    }
+
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar.aspx.cs" Inherits="ex_06.eliminar" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+        <h2>Inserir Dados</h2>
+         <br />
+         <asp:Label ID="lbl_numero" runat="server" Text="Número: "></asp:Label>
+         &nbsp;<asp:TextBox ID="txt_numero" runat="server" ReadOnly="true"></asp:TextBox>
+         <br />
+        <asp:Label ID="lbl_nome" runat="server" Text="Nome: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_nome" runat="server" ReadOnly="true"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_email" runat="server" Text="Email: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_email" runat="server" ReadOnly="true"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_data_nasc" runat="server" Text="Data Nascimento:  "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_data_nasc" runat="server" ReadOnly="true"> </asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_morada" runat="server" Text="Morada: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_morada" runat="server" ReadOnly="true"></asp:TextBox>
+        <br />
+        <asp:Label ID="lbl_genero" runat="server" Text="Genero: "></asp:Label>
+        &nbsp;<asp:DropDownList ID="dd_genero" runat="server" ReadOnly="true"></asp:DropDownList>
+        <br />
+        <asp:Label ID="lbl_turma" runat="server" Text="Turma: "></asp:Label>
+        &nbsp;<asp:DropDownList ID="dd_turma" runat="server" ReadOnly="true"></asp:DropDownList>
+        <br />
+        <asp:Button ID="b_eliminar_click" runat="server" Text="Eliminar" OnClick="bt_eliminar_Click" Height="23px"/>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class eliminar : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+
+            string alunoId = Request.QueryString["id"];
+
+            if (!string.IsNullOrEmpty(alunoId) && int.TryParse(alunoId, out int id))
+            {
+                txt_numero.Text = alunoId;
+
+                string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
+
+                    // Carregar ddl_genero
+                    string sqlGenero = "Select * from t_genero";
+                    using (SqlCommand commandGenero = new SqlCommand(sqlGenero, con))
+                    {
+                        SqlDataReader dataReaderGenero = commandGenero.ExecuteReader();
+                        while (dataReaderGenero.Read())
+                        {
+                            string x = dataReaderGenero.GetValue(0).ToString();
+                            dd_genero.Items.Add(new ListItem(dataReaderGenero.GetValue(1).ToString(), x));
+                        }
+                        dataReaderGenero.Close();
+                    }
+
+                    // Carregar ddl_turma
+                    string sqlTurma = "Select * from t_turma";
+                    using (SqlCommand commandTurma = new SqlCommand(sqlTurma, con))
+                    {
+                        SqlDataReader dataReaderTurma = commandTurma.ExecuteReader();
+                        while (dataReaderTurma.Read())
+                        {
+                            string x = dataReaderTurma.GetValue(0).ToString();
+                            dd_turma.Items.Add(new ListItem(dataReaderTurma.GetValue(1).ToString(), x));
+                        }
+                        dataReaderTurma.Close();
+                    }
+
+                    // Carregar dados do aluno
+                    string sqlAluno = "Select * from t_aluno where numero = @alunoId";
+                    using (SqlCommand commandAluno = new SqlCommand(sqlAluno, con))
+                    {
+                        commandAluno.Parameters.AddWithValue("@alunoId", id);
+                        SqlDataReader dataReaderAluno = commandAluno.ExecuteReader();
+                        if (dataReaderAluno.Read())
+                        {
+                            txt_nome.Text = dataReaderAluno.GetValue(1).ToString();
+                            txt_email.Text = dataReaderAluno.GetValue(2).ToString();
+                            txt_data_nasc.Text = dataReaderAluno.GetValue(3).ToString();
+                            txt_morada.Text = dataReaderAluno.GetValue(4).ToString();
+                            dd_genero.SelectedValue = dataReaderAluno.GetValue(5).ToString();
+                            dd_turma.SelectedValue = dataReaderAluno.GetValue(6).ToString();
+                        }
+                        dataReaderAluno.Close();
+                    }
+
+                }
+
+            }
+
+        }
+
+        protected void bt_eliminar_Click(object sender, EventArgs e)
+        {
+
+            string connectionString;
+            SqlConnection con;
+            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+
+            con = new SqlConnection(connectionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            String sql = "";
+
+            sql = "delete from t_aluno where numero = " + txt_numero.Text;
+
+            command = new SqlCommand(sql, con);
+            adapter.DeleteCommand = new SqlCommand(sql, con);
+            adapter.DeleteCommand.ExecuteNonQuery();
+
+            command.Dispose();
+            con.Close();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
+                    "alert('Dados removidos com sucesso');window.location=listar.aspx;", true);
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+TURMAS.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="turmas.aspx.cs" Inherits="ex_06.turmas" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+
+       <h2>Gerir Turmas</h2>
+       <br /><br />
+        <% Obter_dados(); %>
+       <br /><br />
+       <h3>Adicionar Turmas</h3> 
+       <asp:Label ID="lbl_turma" runat="server" Text="Turma: "></asp:Label>
+       &nbsp;<asp:TextBox ID="txt_turma" runat="server"></asp:TextBox>
+       <br /><br />
+       <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="b_inserir_Click" Height="23px"/>
+
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+TURMAS.ASPX.CS
+
+using Microsoft.SqlServer.Server;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class turmas : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Obter_dados()
+        {
+            string connectionString;
+            SqlConnection con;
+            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            con = new SqlConnection(connectionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = " ";
+            sql = "Select * from t_turma";
+
+            Output = Output + "<table border='1'> <tr><th>ID</th><th>Turma</th><th>Ação</th></tr>";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                Output = Output + "<tr><td>" + dataReader.GetValue(0) + "</td><td>" + dataReader.GetValue(1) +
+                    "</td><td><a href='eliminar_t.aspx?id=" + dataReader.GetValue(0) + "' target=' _self'>Eliminar</a></td></tr>";
+            }
+
+            Response.Write(Output + "</table>");
+            dataReader.Close();
+            con.Close();
+        }
+
+        protected void b_inserir_Click(object sender, EventArgs e)
+        {
+            string connetionString = "Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connetionString))
+            {
+                con.Open();
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "Insert into T_Turma(turma) " +
+                    "values ('" + txt_turma.Text + "')";
+
+                command = new SqlCommand(sql, con);
+                adapter.InsertCommand = new SqlCommand(sql, con);
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
+                    "alert('Dados alterados com sucesso');window.location=listar.aspx;", true);
+            }
+
+        }
+
+    }
+
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_T.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar_t.aspx.cs" Inherits="ex_06.eliminar_t" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+         <h2>Remover Turmas</h2>
+         <br /><br />
+         <asp:Label ID="lbl_numero" runat="server" Text="Id: "></asp:Label>
+         &nbsp;<asp:TextBox ID="txt_id" runat="server" ReadOnly="true"></asp:TextBox>
+         <br /><br />
+         <asp:Label ID="nome" runat="server" Text="Nome: "></asp:Label>
+         &nbsp;<asp:TextBox ID="txt_turma" runat="server" ReadOnly="true"></asp:TextBox>
+         <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click" Height="23px"/>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_T.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class eliminar_t : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            txt_id.Text = Request.QueryString["id"];
+            string connectionString;
+            SqlConnection con;
+            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            con = new SqlConnection(connectionString);  
+            con.Open();
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql;
+            sql = "Select * from t_turma where id=" + Request.QueryString["id"];
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+            dataReader.Read();
+            txt_turma.Text = dataReader.GetValue(1).ToString();
+            dataReader.Close();
+            con.Close();
+        }
+
+        protected void b_eliminar_Click(object sender, EventArgs e)
+        {
+            string connectionString;
+            SqlConnection con;
+            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+
+            con = new SqlConnection(connectionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            String sql = "";
+
+            sql = "delete from t_turma where id = " + txt_id.Text;
+
+            command = new SqlCommand(sql, con);
+            adapter.DeleteCommand = new SqlCommand(sql, con);
+            adapter.DeleteCommand.ExecuteNonQuery();
+
+            command.Dispose();
+            con.Close();
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
+                    "alert('Dados removidos com sucesso'); window.location.href='turmas.aspx';", true);
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+GENEROS.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="generos.aspx.cs" Inherits="ex_06.generos" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+      
+       <h2>Gerir Gêneros</h2>
+       <br /><br />
+        <% Obter_dados(); %>
+       <br /><br />
+       <h3>Adicionar Gêneros</h3> 
+       <asp:Label ID="lbl_genero" runat="server" Text="Turma: "></asp:Label>
+       &nbsp;<asp:TextBox ID="txt_genero" runat="server"></asp:TextBox>
+       <br /><br />
+       <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="b_inserir_Click" Height="23px"/>
+
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+GENEROS.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class generos : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Obter_dados()
+        {
+            string connectionString;
+            SqlConnection con;
+            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            con = new SqlConnection(connectionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = " ";
+            sql = "Select * from t_genero";
+
+            Output = Output + "<table border='1'> <tr><th>ID</th><th>Turma</th><th>Ação</th></tr>";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                Output = Output + "<tr><td>" + dataReader.GetValue(0) + "</td><td>" + dataReader.GetValue(1) +
+                    "</td><td><a href='eliminar_g.aspx?id=" + dataReader.GetValue(0) + "' target=' _self'>Eliminar</a></td></tr>";
+            }
+
+            Response.Write(Output + "</table>");
+            dataReader.Close();
+            con.Close();
+        }
+
+        protected void b_inserir_Click(object sender, EventArgs e)
+        {
+
+            string connetionString = "Data Source = (LocalDB)\\MSSQLLocalDB; AttachDbFilename = C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connetionString))
+            {
+                con.Open();
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "Insert into t_genero(genero) " +
+                    "values ('" + txt_genero.Text + "')";
+
+                command = new SqlCommand(sql, con);
+                adapter.InsertCommand = new SqlCommand(sql, con);
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
+                    "alert('Dados inseridos com sucesso');window.location=generos.aspx;", true);
+
+            }
+
+        }
+
+    }
+
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_G.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar_g.aspx.cs" Inherits="ex_06.eliminar_g" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+        <h2>Remover Turmas</h2>
+        <br /><br />
+        <asp:Label ID="lbl_numero" runat="server" Text="Id: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_id" runat="server" ReadOnly="true"></asp:TextBox>
+        <br /><br />
+        <asp:Label ID="nome" runat="server" Text="Nome: "></asp:Label>
+        &nbsp;<asp:TextBox ID="txt_genero" runat="server" ReadOnly="true"></asp:TextBox>
+        <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click" Height="23px"/>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_G.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace ex_06
+{
+    public partial class eliminar_g : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            txt_id.Text = Request.QueryString["id"];
+            string connectionString;
+            SqlConnection con;
+            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            con = new SqlConnection(connectionString);
+            con.Open();
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql;
+            sql = "Select * from t_genero where id=" + Request.QueryString["id"];
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+            dataReader.Read();
+            txt_genero.Text = dataReader.GetValue(1).ToString();
+            dataReader.Close();
+            con.Close();
+        }
+
+        protected void b_eliminar_Click(object sender, EventArgs e)
+        {
+            string connectionString;
+            SqlConnection con;
+            connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+
+            con = new SqlConnection(connectionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            String sql = "";
+
+            sql = "delete from t_genero where id = " + txt_id.Text;
+
+            command = new SqlCommand(sql, con);
+            adapter.DeleteCommand = new SqlCommand(sql, con);
+            adapter.DeleteCommand.ExecuteNonQuery();
+
+            command.Dispose();
+            con.Close();
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
+                    "alert('Dados removidos com sucesso'); window.location.href='generos.aspx';", true);
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+SITE MASTER
+
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="ex_06.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="pt">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - Meu aplicativo ASP.NET</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" runat="server" href="~/index">Home</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-center">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/listar">Listar</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/inserir">Inserir</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/gerir">Gerir</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/turmas">Turmas</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/generos">Gêneros</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <hr />
+            <footer>
+                <p>&copy; <%: DateTime.Now.Year %> - Meu aplicativo ASP.NET</p>
+            </footer>
+        </div>
+    </form>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+    </asp:PlaceHolder>
+</body>
+</html>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+SITE MASTER
