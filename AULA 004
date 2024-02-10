@@ -1,0 +1,1838 @@
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INDEX.ASPX
+
+<%@ Page Title="SoccerManager_IEFP" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="index.aspx.cs" Inherits="Ex_08.index" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+     <style>
+    body {
+        background-image: url('https://wallpapercave.com/wp/wp1936496.jpg');
+        background-size: cover; 
+        background-repeat: no-repeat;
+        background-attachment: fixed; 
+    }
+    h1, h2, p{
+    text-align: center;
+    color: greenyellow;
+    font-weight: bold;
+    }
+    p b {
+    font-weight: bold;
+    }
+    </style>
+
+   <main aria-labelledby="title" font-weight: bold; style="text-align: center; background-image: url(''); background-size: cover; background-position: center; height: 100%;">
+        <section aria-labelledby="aspnetTitle">
+            <h1 id="aspnetTitle"><i><b>Aplicação Gestão de Jogadores</b></i></h1>
+            <p class="lead"><i><b>Esta aplicação ASP.NET é uma aplicação Web que utiliza bases de dados SQL com múltiplas tabelas, HTML, CSS, and Javascript.</b></i></p>
+        </section>
+
+        <p style="text-align: center;">
+            <img src="https://thumbs.dreamstime.com/z/caucasian-soccer-player-man-juggling-silhouette-one-ball-isolated-white-background-38689216.jpg" width="700" />
+        </p>
+
+        <section aria-labelledby="gettingStartedTitle">
+            <h2 id="gettingStartedTitle"><i><b>Gestão de Equipas</b></i></h2>
+            <p><i><b>A gestão de equipas é composta por um formulário que contém uma listagem simples, um formulário para inserir dados e outro formulário que permite gerir (ou seja, editar e eliminar alunos).</b></i></p>
+            <p style="text-align: center;">
+                <img src="https://www.wallpaperflare.com/static/225/869/220/football-team-al-ahly-sc-egyptian-sports-club-4k-wallpaper.jpg" width="700" />
+            </p>
+        </section>
+    </main>
+
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INDEX.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class index : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+LISTAR.ASPX
+
+<%@ Page Title=".:Listagem de Jogadores:" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="listar.aspx.cs" Inherits="Ex_08.listar" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+     <style>
+        body {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover; 
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+        }
+
+        h2 {
+            text-align: center;
+            color: white;
+        }
+
+    </style>
+    <main aria-labelledby="title">
+        <h2 id="Lista de Alunos Cadastrados" style="color: darkgreen;"><%: Title %>.</h2>
+        <br /><br />
+        <div>
+            <% display_data(); %>
+          <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lawngreen; color: black; border: 2px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='greenyellow'" />
+        </div>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+LISTAR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class listar : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void display_data()
+        {
+            string connection_string;
+            SqlConnection conn;
+
+            connection_string = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+            conn = new SqlConnection(connection_string);
+            conn.Open();
+
+            SqlCommand command;
+            SqlDataReader data_reader;
+
+            String sql;
+            sql = "Select * from t_jogador, t_equipa, t_posicao where equipa_sigla = t_equipa.sigla and posicao_id = t_posicao.id";
+
+            command = new SqlCommand(sql, conn);
+            data_reader = command.ExecuteReader();
+
+            Response.Write("<table style='width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed;' class='table table-striped table-bordered table-hover'>");
+            Response.Write("<thead style='background-color: #28a745; color: #ffffff;' class='thead-dark'><tr>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Numero</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Nome</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Email</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Data Nascimento</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Endereço</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Equipa Sigla</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Posição</th>");
+            Response.Write("</tr></thead>");
+            Response.Write("<tbody>");
+
+
+
+
+
+            while (data_reader.Read())
+            {
+                Response.Write("<tr>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(0) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(1) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(2) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(3) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(4) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(5) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(11) + "</td>");
+                Response.Write("</tr>");
+            }
+
+            Response.Write("</tbody>");
+            Response.Write("</table>");
+
+            data_reader.Close();
+            conn.Close();
+        }
+
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+
+            Response.Redirect("Index.aspx");
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INSERIR.ASPX
+
+<%@ Page Title="Cadastro_Jogadores" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="inserir.aspx.cs" Inherits="Ex_08.inserir" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main 
+        {
+            text-align: center;
+            color: black;
+            padding: 20px;
+        }
+
+        h2 
+        {
+            color: black;
+        }
+
+        label 
+        {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: white;
+        }
+
+        input, select 
+        {
+            margin: 5px 0;
+            border: 5px solid black;
+            height: 40px;
+            width: 400px;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: greenyellow;
+            border: none;
+            cursor: pointer;
+        }
+
+        dropdownlist 
+        {
+            width: 100px;
+        }
+
+        select 
+        {
+            padding: 4px; 
+            font-size: 16px; 
+            color: black; 
+            border: 5px solid black; 
+            background-color: white; 
+        }
+
+        select::-ms-expand,
+        {
+            display: none; 
+        }
+
+        button:hover 
+        {
+            background-color: royalblue;
+        }
+        .label-container 
+        {
+        background-color: seagreen; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 3px solid black; 
+        }
+    </style>
+
+    <main aria-labelledby="Cadastrar Aluno">
+        <div class="label-container">
+        <label for="lbl_numero">Numero</label>
+        <asp:TextBox ID="txt_numero" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_nome">Nome</label>
+        <asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_email">Email</label>
+        <asp:TextBox ID="txt_email" runat="server" TextMode="Email"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_data_nasc">Data Nascimento</label>
+        <asp:TextBox ID="txt_data_nasc" runat="server" TextMode="Date"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_morada">Morada</label>
+        <asp:TextBox ID="txt_morada" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="dd_equipa">Equipa</label>
+        <asp:DropDownList ID="dd_equipa" runat="server"></asp:DropDownList>
+    </div>
+
+    <div class="label-container">
+        <label for="dd_posicao">Posicao</label>
+        <asp:DropDownList ID="dd_posicao" runat="server"></asp:DropDownList>
+    </div>
+
+    <br />
+
+        <br />
+        <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="bt_inserir_Click" Height="50px" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lawngreen; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+           transition: background-color 0.3s;"
+    onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='greenyellow'" />
+        <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lawngreen; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='greenyellow'" />
+
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INSERIR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class inserir : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            string connetionString;
+            SqlConnection con;
+            connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = " ";
+            sql = "Select * from t_equipa";
+            String x;
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(0) + "";
+                dd_equipa.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+            }
+            dataReader.Close();
+
+            sql = "Select * from t_posicao";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(0) + "";
+                dd_posicao.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+            }
+            Response.Write(Output);
+            dataReader.Close();
+            con.Close();
+        }
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Index.aspx");
+        }
+        protected void bt_inserir_Click(object sender, EventArgs e)
+        {
+
+            string connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connetionString))
+            {
+                string sql = "INSERT INTO t_jogador (n_federacao, nome, email, data_nasc, morada, equipa_sigla, posicao_id) VALUES (@n_federacao, @nome, @email, @data_nasc, @morada, @equipa_sigla, @posicao_id)";
+
+                using (SqlCommand command = new SqlCommand(sql, con))
+                {
+                    command.Parameters.AddWithValue("@n_federacao", txt_numero.Text);
+                    command.Parameters.AddWithValue("@nome", txt_nome.Text);
+                    command.Parameters.AddWithValue("@email", txt_email.Text);
+                    command.Parameters.AddWithValue("@data_nasc", txt_data_nasc.Text);
+                    command.Parameters.AddWithValue("@morada", txt_morada.Text);
+                    command.Parameters.AddWithValue("@equipa_sigla", dd_equipa.SelectedValue);
+                    command.Parameters.AddWithValue("@posicao_id", dd_posicao.SelectedValue);
+
+                    con.Open();
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados inseridos com sucesso');window.location = 'listar.aspx'", true);
+        }
+
+    }
+
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR.ASPX
+
+<%@ Page Title="Gerenciar_Jogadores" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="editar.aspx.cs" Inherits="Ex_08.editar" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .btn-container 
+        {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .btnEdit,
+        .btnDelete 
+        {
+            background-color: lawngreen;
+            color: black;
+            border: 2px solid black;
+            padding: 0px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 130px;
+            height: 30px;
+        }
+
+        .btnEdit:hover,
+        .btnDelete:hover 
+        {
+            background-color: skyblue;
+        }
+
+        main 
+        {
+            text-align: center;
+            margin-top: 50px; /* Ajuste conforme necessário */
+        }
+
+        th,
+        td 
+        {
+            text-align: center;
+            margin-top: 10px;
+            border: 2px solid #dee2e6;
+            padding: 10px;
+        }
+
+    </style>
+
+    <main aria-labelledby="title">
+        <h2>Gerir Jogadores</h2>
+        <br />
+        <% Obter_dados(); %>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class editar : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Obter_dados()
+        {
+            string connetionString;
+            SqlConnection con;
+            connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = " ";
+            sql = "Select * from t_jogador, t_equipa, t_posicao where equipa_sigla = t_equipa.sigla and posicao_id = t_posicao.id";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+
+            Response.Write("<table style='width: 100%; border-collapse: collapse; margin-bottom: 20px;' class='table table-striped table-bordered table-hover'>");
+            Response.Write("<thead style='background-color: #28a745; color: #ffffff;' class='thead-dark'><tr>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Numero</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Nome</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Email</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Data Nascimento</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Morada</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Equipa/Sigla</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Posicao</th>");
+            Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Editar/Eliminar</th>");
+            Response.Write("</tr></thead>");
+            Response.Write("<tbody>");
+
+            while (dataReader.Read())
+            {
+                Response.Write("<tr>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>" + dataReader.GetValue(0) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>" + dataReader.GetValue(1) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>" + dataReader.GetValue(2) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>" + dataReader.GetValue(3) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>" + dataReader.GetValue(4) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>" + dataReader.GetValue(5) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>" + dataReader.GetValue(11) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>");
+
+                // Adicionando botões "Editar" e "Eliminar"
+                Button btnEditar = new Button();
+                btnEditar.Text = "Editar";
+                btnEditar.CssClass = "btnEdit";
+                btnEditar.Attributes.Add("onclick", "window.open('editar2.aspx?id=" + dataReader.GetValue(0) + "')");
+                Response.Write(RenderControlAsString(btnEditar));
+
+                Button btnEliminar = new Button();
+                btnEliminar.Text = "Eliminar";
+                btnEliminar.CssClass = "btnDelete";
+                btnEliminar.Attributes.Add("onclick", "window.open('eliminar.aspx?id=" + dataReader.GetValue(0) + "')");
+                Response.Write(RenderControlAsString(btnEliminar));
+
+                Response.Write("</td>");
+                Response.Write("</tr>");
+            }
+
+            Response.Write("</tbody>");
+            Response.Write("</table>");
+
+            dataReader.Close();
+            con.Close();
+        }
+
+        private string RenderControlAsString(Control control)
+        {
+            using (System.IO.StringWriter sw = new System.IO.StringWriter())
+            {
+                using (HtmlTextWriter hw = new HtmlTextWriter(sw))
+                {
+                    control.RenderControl(hw);
+                    return sw.ToString();
+                }
+            }
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR2.ASPX
+
+<%@ Page Title="Edicao_de_Cadastro" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="editar2.aspx.cs" Inherits="Ex_08.editar2" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: black;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: black;
+        }
+
+        input, select {
+            margin: 5px 0;
+            border: 5px solid black;
+            width: 300px; /* Ajuste a largura conforme necessário */
+            padding: 1px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+            height: 40px;
+            width: 400px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+    </style>
+
+       <main aria-labelledby="Cadastrar Aluno">
+        <div class="label-container">
+        <label for="lbl_numero">Numero</label>
+        <asp:TextBox ID="txt_numero" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_nome">Nome</label>
+        <asp:TextBox ID="txt_nome" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_email">Email</label>
+        <asp:TextBox ID="txt_email" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_data_nasc">Data Nascimento</label>
+        <asp:TextBox ID="txt_data_nasc" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_morada">Morada</label>
+        <asp:TextBox ID="txt_morada" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="dd_equipa">Equipa</label>
+        <asp:DropDownList ID="dd_equipa" runat="server"></asp:DropDownList>
+    </div>
+
+    <div class="label-container">
+        <label for="dd_posicao">Posicao</label>
+        <asp:DropDownList ID="dd_posicao" runat="server"></asp:DropDownList>
+    </div>
+
+    <br />
+
+        <br />
+        <asp:Button ID="b_alterar_click" runat="server" Text="Alterar" OnClick="bt_alterar_Click" Height="50px" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: greenyellow; color: black; border: 2px solid black; padding: 10px; cursor: pointer;
+           transition: background-color 0.3s;"
+    onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='greenyellow'" />
+        <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: greenyellow; color: black; border: 2px solid black; padding: 10px; cursor: pointer;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='greenyellow'" />
+
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR2.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class editar2 : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+
+            string alunoId = Request.QueryString["id"];
+
+            if (!string.IsNullOrEmpty(alunoId) && int.TryParse(alunoId, out int id))
+            {
+                txt_numero.Text = alunoId;
+
+                string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
+
+                    string sqlGenero = "Select * from t_equipa";
+                    using (SqlCommand commandGenero = new SqlCommand(sqlGenero, con))
+                    {
+                        SqlDataReader dataReaderGenero = commandGenero.ExecuteReader();
+                        while (dataReaderGenero.Read())
+                        {
+                            string x = dataReaderGenero.GetValue(0).ToString();
+                            dd_equipa.Items.Add(new ListItem(dataReaderGenero.GetValue(1).ToString(), x));
+                        }
+                        dataReaderGenero.Close();
+                    }
+
+                    string sqlTurma = "Select * from t_posicao";
+                    using (SqlCommand commandTurma = new SqlCommand(sqlTurma, con))
+                    {
+                        SqlDataReader dataReaderTurma = commandTurma.ExecuteReader();
+                        while (dataReaderTurma.Read())
+                        {
+                            string x = dataReaderTurma.GetValue(0).ToString();
+                            dd_posicao.Items.Add(new ListItem(dataReaderTurma.GetValue(1).ToString(), x));
+                        }
+                        dataReaderTurma.Close();
+                    }
+
+                    // Carregar dados do aluno
+                    string sqlAluno = "Select * from t_jogador where n_federacao = @alunoId";
+                    using (SqlCommand commandAluno = new SqlCommand(sqlAluno, con))
+                    {
+                        commandAluno.Parameters.AddWithValue("@alunoId", id);
+                        SqlDataReader dataReaderAluno = commandAluno.ExecuteReader();
+                        if (dataReaderAluno.Read())
+                        {
+                            txt_nome.Text = dataReaderAluno.GetValue(1).ToString();
+                            txt_email.Text = dataReaderAluno.GetValue(2).ToString();
+                            txt_data_nasc.Text = dataReaderAluno.GetValue(3).ToString();
+                            txt_morada.Text = dataReaderAluno.GetValue(4).ToString();
+                            dd_equipa.SelectedValue = dataReaderAluno.GetValue(5).ToString();
+                            dd_posicao.SelectedValue = dataReaderAluno.GetValue(6).ToString();
+                        }
+                        dataReaderAluno.Close();
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        protected void bt_alterar_Click(object sender, EventArgs e)
+        {
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                SqlCommand command;
+                String sql = "";
+
+                sql = "update t_jogador set nome=@nome, email=@email, data_nasc=@data_nasc, ";
+                sql += "morada=@morada, equipa_sigla=@equipa_sigla, posicao_id=@posicao_id where n_federacao=@n_federacao";
+
+                command = new SqlCommand(sql, con);
+
+                command.Parameters.AddWithValue("@nome", txt_nome.Text);
+                command.Parameters.AddWithValue("@email", txt_email.Text);
+                command.Parameters.AddWithValue("@data_nasc", txt_data_nasc.Text);
+                command.Parameters.AddWithValue("@morada", txt_morada.Text);
+                command.Parameters.AddWithValue("@equipa_sigla", dd_equipa.SelectedValue);
+                command.Parameters.AddWithValue("@posicao_id", dd_posicao.SelectedValue);
+                command.Parameters.AddWithValue("@n_federacao", txt_numero.Text);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados alterados com sucesso');window.location = 'listar.aspx'", true);
+
+            }
+
+        }
+
+            protected void b_backbutton_Click(object sender, EventArgs e)
+            {
+
+                Response.Redirect("Index.aspx");
+
+            }
+
+        }
+
+    }
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR.ASPX
+
+<%@ Page Title="Eliminar_Jogador" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar.aspx.cs" Inherits="Ex_08.eliminar" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: black;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: black;
+        }
+
+        input, select {
+            margin: 5px 0;
+            border: 5px solid black;
+            width: 300px; /* Ajuste a largura conforme necessário */
+            padding: 1px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+            height: 40px;
+            width: 400px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+    </style>
+
+       <main aria-labelledby="Cadastrar Aluno">
+        <div class="label-container">
+        <label for="lbl_numero">Numero</label>
+        <asp:TextBox ID="txt_numero" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_nome">Nome</label>
+        <asp:TextBox ID="txt_nome" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_email">Email</label>
+        <asp:TextBox ID="txt_email" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_data_nasc">Data Nascimento</label>
+        <asp:TextBox ID="txt_data_nasc" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_morada">Morada</label>
+        <asp:TextBox ID="txt_morada" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="dd_equipa">Equipa</label>
+        <asp:DropDownList ID="dd_equipa" runat="server" ReadOnly="true"></asp:DropDownList>
+    </div>
+
+    <div class="label-container">
+        <label for="dd_posicao">Posicao</label>
+        <asp:DropDownList ID="dd_posicao" runat="server" ReadOnly="true"></asp:DropDownList>
+    </div>
+
+    <br />
+
+        <br />
+        <asp:Button ID="b_eliminar_click" runat="server" Text="Eliminar" OnClick="bt_eliminar_Click" Height="50px" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: greenyellow; color: black; border: 2px solid black; padding: 10px; cursor: pointer;
+           transition: background-color 0.3s;"
+    onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='yellowgreen'" />
+        <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: greenyellow; color: black; border: 2px solid black; padding: 10px; cursor: pointer;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='yellowgreen'" />
+
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class eliminar : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+
+            string alunoId = Request.QueryString["id"];
+
+            if (!string.IsNullOrEmpty(alunoId) && int.TryParse(alunoId, out int id))
+            {
+                txt_numero.Text = alunoId;
+
+                string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
+
+                    string sqlGenero = "Select * from t_equipa";
+                    using (SqlCommand commandGenero = new SqlCommand(sqlGenero, con))
+                    {
+                        SqlDataReader dataReaderGenero = commandGenero.ExecuteReader();
+                        while (dataReaderGenero.Read())
+                        {
+                            string x = dataReaderGenero.GetValue(0).ToString();
+                            dd_equipa.Items.Add(new ListItem(dataReaderGenero.GetValue(1).ToString(), x));
+                        }
+                        dataReaderGenero.Close();
+                    }
+
+                    string sqlTurma = "Select * from t_posicao";
+                    using (SqlCommand commandTurma = new SqlCommand(sqlTurma, con))
+                    {
+                        SqlDataReader dataReaderTurma = commandTurma.ExecuteReader();
+                        while (dataReaderTurma.Read())
+                        {
+                            string x = dataReaderTurma.GetValue(0).ToString();
+                            dd_posicao.Items.Add(new ListItem(dataReaderTurma.GetValue(1).ToString(), x));
+                        }
+                        dataReaderTurma.Close();
+                    }
+
+                    // Carregar dados do aluno
+                    string sqlAluno = "Select * from t_jogador where n_federacao = @alunoId";
+                    using (SqlCommand commandAluno = new SqlCommand(sqlAluno, con))
+                    {
+                        commandAluno.Parameters.AddWithValue("@alunoId", id);
+                        SqlDataReader dataReaderAluno = commandAluno.ExecuteReader();
+                        if (dataReaderAluno.Read())
+                        {
+                            txt_nome.Text = dataReaderAluno.GetValue(1).ToString();
+                            txt_email.Text = dataReaderAluno.GetValue(2).ToString();
+                            txt_data_nasc.Text = dataReaderAluno.GetValue(3).ToString();
+                            txt_morada.Text = dataReaderAluno.GetValue(4).ToString();
+                            dd_equipa.SelectedValue = dataReaderAluno.GetValue(5).ToString();
+                            dd_posicao.SelectedValue = dataReaderAluno.GetValue(6).ToString();
+                        }
+                        dataReaderAluno.Close();
+                    }
+
+                }
+
+            }
+
+        }
+
+        protected void bt_eliminar_Click(object sender, EventArgs e)
+        {
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+     
+                con.Open();
+
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "delete from t_jogador where n_federacao = " + txt_numero.Text;
+
+                command = new SqlCommand(sql, con);
+                adapter.DeleteCommand = new SqlCommand(sql, con);
+                adapter.DeleteCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados alterados com sucesso');window.location = 'listar.aspx'", true);
+
+            }
+
+        }
+
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Index.aspx");
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR_E.ASPX
+
+<%@ Page Title="Gerenciamento_Equipas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="editar_e.aspx.cs" Inherits="Ex_08.editar_e" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: black;
+        }
+
+        input {
+            display: block;
+            margin: 0px auto; /* Adicionado para centralizar a TextBox e a Label */
+            text-align: center;
+            color: black;
+            border: 5px solid black;
+        }
+
+        label {
+            font-size: 20px; /* Tamanho da fonte da Label ajustado */
+        }
+
+        main {
+            text-align: center;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: greenyellow;
+            color: black;
+            border: 2px solid black;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 200px;
+            height: 40px;
+        }
+
+        button:hover {
+            background-color: white;
+        }
+
+        label {
+            text-align: center;
+            color: black;
+            font-weight: bold;
+        }
+
+        input {
+
+            margin-bottom: 40px;
+
+        }
+    </style>
+
+    <main aria-labelledby="title">
+        <h2>Gerir Equipas</h2>
+        <br /><br />
+        <% Obter_dados(); %>
+        <br /><br />
+        <h3>Adicionar Equipa</h3>
+        <label for="lbl_sigla">Sigla</label>
+        &nbsp;<asp:TextBox ID="txt_sigla" runat="server"></asp:TextBox>
+      
+        <label for="lbl_equipa">Equipa</label>
+        &nbsp;<asp:TextBox ID="txt_equipa" runat="server"></asp:TextBox>
+
+        <label for="lbl_escudo">Escudo</label>
+        &nbsp;<asp:TextBox ID="txt_escudo" runat="server"></asp:TextBox>
+
+        <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="b_inserir_Click" Height="23px"
+            style="text-align: center; width: 200px; height: 50px;  margin-left: auto; margin-right: auto; display: block; background-color: greenyellow; color: black; border: 2px solid black; padding: 10px; cursor: pointer;
+               transition: background-color 0.3s;" />
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR_E.ASPX.CS
+
+using System;
+using System.Data.SqlClient;
+using System.Web.UI;
+
+namespace ex_06
+{
+    public partial class turmas : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Obter_dados()
+        {
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                SqlCommand command = new SqlCommand("SELECT * FROM t_turma", con);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                Response.Write("<div style='overflow-x:auto;'>");
+                Response.Write("<table class='table table-striped table-bordered table-hover'>");
+                Response.Write("<thead style='background-color: #007bff; color: #ffffff;' class='thead-dark'><tr>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>ID</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Turma</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 2px solid black;'>Ação</th>");
+                Response.Write("</tr></thead>");
+                Response.Write("<tbody>");
+
+                while (dataReader.Read())
+                {
+                    Response.Write("<tr>");
+                    Response.Write("<td class='text-center table-cell'>" + dataReader.GetValue(0) + "</td>");
+                    Response.Write("<td class='text-center table-cell'>" + dataReader.GetValue(1) + "</td>");
+                    Response.Write("<td class='text-center table-cell'><a href='eliminar_t.aspx?id=" + dataReader.GetValue(0) + "' class='btnDelete'>Eliminar</a></td>");
+                    Response.Write("</tr>");
+                }
+
+                Response.Write("</tbody></table></div>");
+
+                dataReader.Close();
+            }
+        }
+
+
+        protected void b_inserir_Click(object sender, EventArgs e)
+        {
+            string connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Rafael\\C_#\\ex_06\\App_Data\\db06mdf.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connetionString))
+            {
+                con.Open();
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "Insert into T_Turma(turma) " +
+                    "values ('" + txt_turma.Text + "')";
+
+                command = new SqlCommand(sql, con);
+                adapter.InsertCommand = new SqlCommand(sql, con);
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados",
+                    "alert('Dados alterados com sucesso');window.location='listar.aspx';", true);
+            }
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_E.ASPX
+
+<%@ Page Title="Eliminar_Equipas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar_e.aspx.cs" Inherits="Ex_08.eliminar_e" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: black;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: black;
+        }
+
+        input {
+            margin: 5px 0;
+            border: 5px solid black;
+            width: 300px; /* Ajuste a largura conforme necessário */
+            height: 40px;
+            padding: 8px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+
+        select {
+            width: 300px; /* Ajuste a largura conforme necessário */
+            padding: 1px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+            color: cornflowerblue; /* Cor do texto na lista suspensa */
+            border: 5px solid cornflowerblue; /* Adicione uma borda personalizada */
+            background-color: white; /* Cor de fundo da lista suspensa */
+            height: 40px;
+        }
+
+        /* Estilo para a seta na lista suspensa (opcional) */
+        select::-ms-expand,
+        select::-webkit-select-arrow {
+            display: none; /* Esconde a seta padrão */
+        }
+    </style>
+
+    <main aria-labelledby="Remover Turmas">
+        <h2>Remover Equipa</h2>
+        <br /><br />
+        <label for="lbl_sigla">Sigla: </label>
+        <asp:TextBox ID="txt_sigla" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <label for="lbl_equipa">Descrição: </label>
+        <asp:TextBox ID="txt_descricao" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <br /><br />
+        <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click" Height="50px" Width="200px" 
+            style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: greenyellow; color: black; border: 2px solid black; padding: 10px; cursor: pointer;
+            transition: background-color 0.3s;"
+            onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='greenyellow'" />
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_E.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class eliminar_e : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            txt_sigla.Text = Request.QueryString["id"];
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                SqlCommand command;
+                SqlDataReader dataReader;
+                String sql = "SELECT * FROM t_equipa WHERE sigla = @sigla";
+
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@sigla", txt_sigla.Text);
+                dataReader = command.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    // Se houver resultados, exibe os dados encontrados
+                    txt_sigla.Text = dataReader["sigla"].ToString();
+                    txt_descricao.Text = dataReader["descricao"].ToString();
+                    // Aqui você pode exibir outros campos conforme necessário
+                }
+
+                dataReader.Close();
+                con.Close();
+            }
+        }
+
+        protected void b_eliminar_Click(object sender, EventArgs e)
+        {
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+
+                con.Open();
+
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "Delete T_equipa where sigla='" + txt_sigla.Text + "';";
+
+                command = new SqlCommand(sql, con);
+                adapter.DeleteCommand = new SqlCommand(sql, con);
+                adapter.DeleteCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Equipa Removida com Sucesso');window.location = 'editar_e.aspx'", true);
+
+            }
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR_P.ASPX
+
+<%@ Page Title="Gerenciamento_de_Posicoes" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="editar_p.aspx.cs" Inherits="Ex_08.editar_p" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+        <style>
+            body {
+                background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+
+            h2, h3 {
+                text-align: center;
+                color: black;
+                margin-block: 50px;
+            }
+
+            input, label {
+                display: block;
+                margin: 10px auto;
+                text-align: center;
+                color: black;
+            }
+
+            label {
+                font-size: 20px;
+            }
+
+            main {
+                text-align: center;
+            }
+
+            .container {
+                max-width: 800px; /* Ajuste conforme necessário */
+                margin: 0 auto;
+            }
+
+            .row {
+                margin-bottom: 20px;
+            }
+
+            .button-container {
+                text-align: center;
+                border-color: black;
+            }
+
+            button {
+                padding: 10px 20px;
+                background-color: lightblue;
+                color: white;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                transition: background-color 0.3s;
+                width: 200px;
+                height: 40px;
+            }
+
+            button:hover {
+                background-color: skyblue;
+            }
+        </style>
+
+        <div class="container">
+            <h2>Gerir Posições</h2>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <% Obter_dados(); %>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Adicionar Posições</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <asp:TextBox ID="txt_posicao" runat="server" CssClass="form-control" placeholder="Posição"></asp:TextBox>
+                </div>
+            </div>
+
+           <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="b_inserir_Click" CssClass="btn btn-primary"
+    style="text-align: center; width: 200px; height: 50px; margin-left: auto; margin-right: auto; display: block; background-color: greenyellow; color: black; border: 2px solid black; padding: 10px; cursor: pointer; transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='white'"
+    onmouseout="this.style.backgroundColor='greenyellow'" />
+                </div>
+            </div>
+        </div>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR_P.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class editar_p : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Obter_dados()
+        {
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                SqlCommand command = new SqlCommand("SELECT * FROM t_posicao", con);
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                Response.Write("<div style='overflow-x:auto;'>");
+                Response.Write("<table class='table table-striped table-bordered table-hover'>");
+                Response.Write("<thead style='background-color: #28a745; color: #ffffff;' class='thead-dark'><tr>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>ID</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Posição</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Ação</th>");
+                Response.Write("</tr></thead>");
+                Response.Write("<tbody>");
+
+                while (dataReader.Read())
+                {
+                    Response.Write("<tr>");
+                    Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + dataReader.GetValue(0) + "</td>");
+                    Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + dataReader.GetValue(1) + "</td>");
+                    Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'><a href='Eliminar_p?id=" + dataReader.GetValue(0) + "' class='btnDelete'>Eliminar</a></td>");
+                    Response.Write("</tr>");
+                }
+
+
+                Response.Write("</tbody></table></div>");
+
+                dataReader.Close();
+            }
+        }
+
+        protected void b_inserir_Click(object sender, EventArgs e)
+        {
+
+            string connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connetionString))
+            {
+                con.Open();
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "Insert into t_posicao(posicao) " +
+                    "values ('" + txt_posicao.Text + "')";
+
+                command = new SqlCommand(sql, con);
+                adapter.InsertCommand = new SqlCommand(sql, con);
+                adapter.InsertCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Posição Adicionada com Sucesso!');window.location = 'editar_p.aspx'", true);
+
+            }
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_P.ASPX
+
+<%@ Page Title="Eliminar_Posicoest" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="eliminar_p.aspx.cs" Inherits="Ex_08.eliminar_p" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            color: black;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: black;
+        }
+
+        input {
+            margin: 5px 0;
+            border: 5px solid black;
+            width: 300px; /* Ajuste a largura conforme necessário */
+            height: 40px;
+            padding: 8px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: lightblue;
+            color: white;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: skyblue;
+        }
+
+        select {
+            width: 300px; /* Ajuste a largura conforme necessário */
+            padding: 1px; /* Adicione ou ajuste o preenchimento conforme necessário */
+            font-size: 16px; /* Ajuste o tamanho da fonte conforme necessário */
+            color: cornflowerblue; /* Cor do texto na lista suspensa */
+            border: 5px solid black; /* Adicione uma borda personalizada */
+            background-color: white; /* Cor de fundo da lista suspensa */
+            height: 40px;
+        }
+
+        /* Estilo para a seta na lista suspensa (opcional) */
+        select::-ms-expand,
+        select::-webkit-select-arrow {
+            display: none; /* Esconde a seta padrão */
+        }
+    </style>
+
+    <main aria-labelledby="Remover Turmas">
+        <h2>Remover Posição</h2>
+        <br /><br />
+        <label for="lbl_posicao">Posição: </label>
+        <asp:TextBox ID="txt_posicao" runat="server" ReadOnly="true"></asp:TextBox>
+
+        <br /><br />
+        <asp:Button ID="b_eliminar" runat="server" Text="Eliminar" OnClick="b_eliminar_Click" Height="50px" Width="200px" 
+            style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: greenyellow; color: black; border: 1px solid black; padding: 10px; cursor: pointer;
+            transition: background-color 0.3s;"
+            onmouseover="this.style.backgroundColor='skyblue'" onmouseout="this.style.backgroundColor='yellowgreen'" />
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_P.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Ex_08
+{
+    public partial class eliminar_p : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            txt_posicao.Text = Request.QueryString["id"];
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                SqlCommand command;
+                SqlDataReader dataReader;
+                String sql = "SELECT * FROM t_posicao WHERE posicao = @posicao";
+
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@posicao", txt_posicao.Text);
+                dataReader = command.ExecuteReader();
+
+                if (dataReader.Read())
+                {
+                    // Se houver resultados, exibe os dados encontrados
+                    txt_posicao.Text = dataReader["posicao"].ToString();
+                 
+                }
+
+                dataReader.Close();
+                con.Close();
+            }
+        }
+
+        protected void b_eliminar_Click(object sender, EventArgs e)
+        {
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Ex_08\\App_Data\\t_futebol.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+
+                con.Open();
+
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "Delete t_posicao where id='" + txt_posicao.Text + "';";
+
+                command = new SqlCommand(sql, con);
+                adapter.DeleteCommand = new SqlCommand(sql, con);
+                adapter.DeleteCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Posição Removida com Sucesso');window.location = 'editar_p.aspx'", true);
+
+
+
+            }
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+SITE MASTER
+
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="Ex_08.SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="pt">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - Meu aplicativo ASP.NET</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Framework Scripts--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Site Scripts--%>
+            </Scripts>
+        </asp:ScriptManager>
+
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-success">
+            <div class="container">
+                <a class="navbar-brand" runat="server" href="~/index">Home</a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/listar">Cadastros</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/inserir">Inscrição</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/editar">Gerenciamento</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/editar_e">Controlo de Equipas</a></li>
+                        <li class="nav-item"><a class="nav-link" runat="server" href="~/editar_p">Controlo de Posições</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <hr />
+            <footer>
+                <p>&copy; Linkedin: https://www.linkedin.com/in/rafael-albuquerque-b8606a272/</p>
+                 <p>&copy; Github: https://github.com/R4F43LL-D3VB3GINN3R/</p>
+            </footer>
+        </div>
+    </form>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
+    </asp:PlaceHolder>
+</body>
+</html>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
