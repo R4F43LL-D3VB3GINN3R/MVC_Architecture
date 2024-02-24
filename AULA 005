@@ -650,3 +650,208 @@ namespace Atividade10_Rafael_Albuquerque
         }
     }
 }
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR_CLIENTE.ASPX.
+
+<%@ Page Title=".:Gerir Clientes:" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Gerir_Cliente.aspx.cs" Inherits="Atividade10_Rafael_Albuquerque.Gerir_Cliente" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://animetya.com/wp-content/uploads/2017/11/sky2-1024x729.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main 
+        {
+            text-align: center;
+            color: black;
+            padding: 20px;
+        }
+
+        h2 
+        {
+            color: black;
+        }
+
+        label 
+        {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: blue;
+            font-style: italic;
+        }
+
+        input, select 
+        {
+            margin: 5px 0;
+            border: 3px solid blue;
+            height: 40px;
+            width: 400px;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: greenyellow;
+            border: none;
+            cursor: pointer;
+        }
+
+        dropdownlist 
+        {
+            width: 100px;
+        }
+
+        select 
+        {
+            padding: 4px; 
+            font-size: 16px; 
+            color: blueviolet; 
+            border: 3px solid blue; 
+            background-color: white; 
+        }
+
+        select::-ms-expand
+        {
+            display: none; 
+        }
+
+        button:hover 
+        {
+            background-color: royalblue;
+        }
+        .label-container 
+        {
+        background-color: lightblue; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 3px solid blue; 
+        }
+    </style>
+    <main aria-labelledby="title">
+    <h2 id="Gerir Clientes" style="color: white;"><%: Title %>.</h2>
+    <br /><br />
+    <div>
+        <% display_data(); %>
+        <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+        style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+        transition: background-color 0.3s;" 
+        onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+    </div>
+</main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR_CLIENTE.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Editar_Cliente : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+
+            string alunoId = Request.QueryString["id"];
+
+            if (!string.IsNullOrEmpty(alunoId) && int.TryParse(alunoId, out int id))
+            {
+                txt_id.Text = alunoId;
+
+                string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+
+                    string sqlAluno = "Select * from tab_cliente where id = @alunoId";
+                    con.Open();
+
+                    using (SqlCommand commandAluno = new SqlCommand(sqlAluno, con))
+                    {
+                        commandAluno.Parameters.AddWithValue("@alunoId", id);
+                        SqlDataReader dataReaderAluno = commandAluno.ExecuteReader();
+
+                        if (dataReaderAluno.Read())
+                        {
+                            txt_id.Text = dataReaderAluno.GetValue(0).ToString();
+                            txt_nome.Text = dataReaderAluno.GetValue(1).ToString();
+                            txt_morada.Text = dataReaderAluno.GetValue(2).ToString();
+                            txt_telefone.Text = dataReaderAluno.GetValue(3).ToString();
+                            
+                        }
+
+                        dataReaderAluno.Close();
+
+                    }
+
+                }
+
+            }
+
+        }
+        protected void bt_inserir_Click(object sender, EventArgs e)
+        {
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+
+                con.Open();
+                SqlCommand command;
+                String sql = "";
+
+                sql = "update tab_cliente set nome=@nome, morada=@morada, telefone=@telefone";
+
+                command = new SqlCommand(sql, con);
+
+                command.Parameters.AddWithValue("@nome", txt_nome.Text);
+                command.Parameters.AddWithValue("@morada", txt_morada.Text);
+                command.Parameters.AddWithValue("@telefone", txt_telefone.Text);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados alterados com sucesso');window.location = 'Gerir_Cliente.aspx'", true);
+
+            }
+
+        }
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+
+            Response.Redirect("Gerir_Cliente.aspx");
+
+        }
+
+    }
+
+}
+
