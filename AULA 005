@@ -1,0 +1,448 @@
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INDEX.ASPX
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server"><style>
+
+    body {
+        background-image: url('https://andrebona.com.br/wp-content/uploads/2022/04/RBFF11-Vale-a-pena-investir-nesse-fundo-de-investimento-imobiliario-Descubra.png');
+        background-size: cover; 
+        background-repeat: no-repeat;
+        background-attachment: fixed; 
+    }
+    
+    h1, h2, p{
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    }
+
+    p b {
+    font-weight: bold;
+    }
+
+    </style>
+
+   <main aria-labelledby="title" font-weight: bold; style="text-align: center; background-image: url(''); background-size: cover; background-position: center; height: 100%;">
+        <section aria-labelledby="aspnetTitle">
+            <h1 id="aspnetTitle"><i><b>Aplicação Gestão Imobiliária</b></i></h1>
+            <p class="lead"><i><b>IEFP - Rafael - 2024.</b></i></p>
+        </section>
+    </main>
+
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+INDEX.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Index : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+LISTAR_CLIENTE.ASPX
+
+<%@ Page Title=".:Listagem de Jogadores:" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="listar.aspx.cs" Inherits="Ex_08.listar" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+
+     <style>
+        body {
+            background-image: url('https://wallpapercave.com/wp/wp3432038.jpg');
+            background-size: cover; 
+            background-repeat: no-repeat;
+            background-attachment: fixed; 
+        }
+
+        h2 {
+            text-align: center;
+            color: white;
+        }
+
+    </style>
+    <main aria-labelledby="title">
+        <h2 id="Lista de Alunos Cadastrados" style="color: darkgreen;"><%: Title %>.</h2>
+        <br /><br />
+        <div>
+            <% display_data(); %>
+          <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: lawngreen; color: black; border: 2px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='greenyellow'" />
+        </div>
+    </main>
+</asp:Content>
+
+<%@ Page Title=".:Nossos Parceiros:" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Listar_Cliente.aspx.cs" Inherits="Atividade10_Rafael_Albuquerque.Listar_Cliente" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://animetya.com/wp-content/uploads/2017/11/sky2-1024x729.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main 
+        {
+            text-align: center;
+            color: black;
+            padding: 20px;
+        }
+
+        h2 
+        {
+            color: black;
+        }
+
+        label 
+        {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: blue;
+            font-style: italic;
+        }
+
+        input, select 
+        {
+            margin: 5px 0;
+            border: 3px solid blue;
+            height: 40px;
+            width: 400px;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: greenyellow;
+            border: none;
+            cursor: pointer;
+        }
+
+        dropdownlist 
+        {
+            width: 100px;
+        }
+
+        select 
+        {
+            padding: 4px; 
+            font-size: 16px; 
+            color: blueviolet; 
+            border: 3px solid blue; 
+            background-color: white; 
+        }
+
+        select::-ms-expand
+        {
+            display: none; 
+        }
+
+        button:hover 
+        {
+            background-color: royalblue;
+        }
+        .label-container 
+        {
+        background-color: lightblue; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 3px solid blue; 
+        }
+    </style>
+
+    <main aria-labelledby="title">
+        <h2 id="Nossos Parceiros" style="color: white;"><%: Title %>.</h2>
+        <br /><br />
+        <div>
+            <% display_data(); %>
+            <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+            style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+            transition: background-color 0.3s;" 
+            onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+        </div>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+LISTAR_CLIENTE.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Listar_Cliente : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void display_data()
+        {
+            string connection_string;
+            SqlConnection conn;
+
+            connection_string = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+            conn = new SqlConnection(connection_string);
+            conn.Open();
+
+            SqlCommand command;
+            SqlDataReader data_reader;
+
+            String sql;
+            sql = "Select * from tab_cliente";
+
+            command = new SqlCommand(sql, conn);
+            data_reader = command.ExecuteReader();
+
+            Response.Write("<table style='width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed;' class='table table-striped table-bordered table-hover'>");
+            Response.Write("<thead style='background-color: royalblue; color: #ffffff;' class='thead-dark'><tr>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Nome</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Telefone</th>");
+            Response.Write("</tr></thead>");
+            Response.Write("<tbody>");
+
+            while (data_reader.Read())
+            {
+                Response.Write("<tr>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(1) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(3) + "</td>");
+                Response.Write("</tr>");
+            }
+
+            Response.Write("</tbody>");
+            Response.Write("</table>");
+
+            data_reader.Close();
+            conn.Close();
+        }
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+
+            Response.Redirect("Index.aspx");
+
+        }
+
+    }
+
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+LISTAR_CASA.ASPX
+
+<%@ Page Title=".:Nossos Imóveis:" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Listar_Casa.aspx.cs" Inherits="Atividade10_Rafael_Albuquerque.Listar_Casa
+    " %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://animetya.com/wp-content/uploads/2017/11/sky2-1024x729.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main 
+        {
+            text-align: center;
+            color: black;
+            padding: 20px;
+        }
+
+        h2 
+        {
+            color: black;
+        }
+
+        label 
+        {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: blue;
+            font-style: italic;
+        }
+
+        input, select 
+        {
+            margin: 5px 0;
+            border: 3px solid blue;
+            height: 40px;
+            width: 400px;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: greenyellow;
+            border: none;
+            cursor: pointer;
+        }
+
+        dropdownlist 
+        {
+            width: 100px;
+        }
+
+        select 
+        {
+            padding: 4px; 
+            font-size: 16px; 
+            color: blueviolet; 
+            border: 3px solid blue; 
+            background-color: white; 
+        }
+
+        select::-ms-expand
+        {
+            display: none; 
+        }
+
+        button:hover 
+        {
+            background-color: royalblue;
+        }
+        .label-container 
+        {
+        background-color: lightblue; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 3px solid blue; 
+        }
+    </style>
+
+    <main aria-labelledby="title">
+        <h2 id="Nossos Imóveis" style="color: white;"><%: Title %>.</h2>
+        <br /><br />
+        <div>
+            <% display_data(); %>
+            <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+            style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+            transition: background-color 0.3s;" 
+            onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+        </div>
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+LISTAR_CASA.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Listar_Casa : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void display_data()
+        {
+            string connection_string;
+            SqlConnection conn;
+
+            connection_string = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+            conn = new SqlConnection(connection_string);
+            conn.Open();
+
+            SqlCommand command;
+            SqlDataReader data_reader;
+
+            String sql;
+            sql = "SELECT tab_casa.Id, tab_casa.zona, tab_casa.n_assoalhadas AS Tipo, tab_casa.ano, tab_casa.preco, tab_cliente.nome AS Vendedor " +
+                  "FROM tab_casa " +
+                  "INNER JOIN tab_cliente ON tab_casa.id_cliente = tab_cliente.Id";
+
+            command = new SqlCommand(sql, conn);
+            data_reader = command.ExecuteReader();
+
+            Response.Write("<table style='width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed;' class='table table-striped table-bordered table-hover'>");
+            Response.Write("<thead style='background-color: royalblue; color: #ffffff;' class='thead-dark'><tr>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Id</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Zona</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Tipo</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Ano</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Preco</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Vendedor</th>");
+            Response.Write("</tr></thead>");
+            Response.Write("<tbody>");
+
+            while (data_reader.Read())
+            {
+                Response.Write("<tr>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(0) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(1) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(2) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(3) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(4) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(5) + "</td>");
+                Response.Write("</tr>");
+            }
+
+            Response.Write("</tbody>");
+            Response.Write("</table>");
+
+            data_reader.Close();
+            conn.Close();
+
+        }
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+
+            Response.Redirect("Index.aspx");
+
+        }
+
+    }
+
+}
