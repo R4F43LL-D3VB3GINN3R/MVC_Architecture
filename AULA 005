@@ -1082,3 +1082,732 @@ namespace Atividade10_Rafael_Albuquerque
     }
 
 }
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+GERIR_CASAS.ASPX
+
+<%@ Page Title="Gerir Casas" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Gerir_Casas.aspx.cs" Inherits="Atividade10_Rafael_Albuquerque.Gerir_Casas" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://animetya.com/wp-content/uploads/2017/11/sky2-1024x729.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main 
+        {
+            text-align: center;
+            color: black;
+            padding: 20px;
+        }
+
+        h2 
+        {
+            color: black;
+        }
+
+        label 
+        {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: blue;
+            font-style: italic;
+        }
+
+        input, select 
+        {
+            margin: 5px 0;
+            border: 3px solid blue;
+            height: 40px;
+            width: 400px;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: greenyellow;
+            border: none;
+            cursor: pointer;
+        }
+
+        dropdownlist 
+        {
+            width: 100px;
+        }
+
+        select 
+        {
+            padding: 4px; 
+            font-size: 16px; 
+            color: blueviolet; 
+            border: 3px solid blue; 
+            background-color: white; 
+        }
+
+        select::-ms-expand
+        {
+            display: none; 
+        }
+
+        button:hover 
+        {
+            background-color: royalblue;
+        }
+        .label-container 
+        {
+        background-color: lightblue; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 3px solid blue; 
+        }
+    </style>
+    <main aria-labelledby="title">
+    <h2 id="Gerir Clientes" style="color: white;"><%: Title %>.</h2>
+    <br /><br />
+    <div>
+        <% display_data(); %>
+        <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+        style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+        transition: background-color 0.3s;" 
+        onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+    </div>
+</main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+GERIR_CASAS.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Gerir_Casas : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+        protected void display_data()
+        {
+            string connection_string;
+            SqlConnection conn;
+
+            connection_string = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+            conn = new SqlConnection(connection_string);
+            conn.Open();
+
+            SqlCommand command;
+            SqlDataReader data_reader;
+
+            String sql;
+            sql = "SELECT tab_casa.Id, tab_casa.zona, tab_casa.n_assoalhadas AS Tipo, tab_casa.ano, tab_casa.preco, tab_cliente.nome AS Vendedor " +
+                  "FROM tab_casa " +
+                  "INNER JOIN tab_cliente ON tab_casa.id_cliente = tab_cliente.Id";
+
+            command = new SqlCommand(sql, conn);
+            data_reader = command.ExecuteReader();
+
+            Response.Write("<table style='width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed;' class='table table-striped table-bordered table-hover'>");
+            Response.Write("<thead style='background-color: royalblue; color: #ffffff;' class='thead-dark'><tr>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Nome</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Zona</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Tipo</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Ano</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Preco</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Vendedor</th>");
+            Response.Write("<th style='width: 20%; text-align: center; border: 3px solid black;'>Gerenciar</th>");
+            Response.Write("</tr></thead>");
+            Response.Write("<tbody>");
+
+            while (data_reader.Read())
+            {
+                Response.Write("<tr>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(0) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(1) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(2) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(3) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(4) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + data_reader.GetValue(5) + "</td>");
+                Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black; vertical-align: middle;'>");
+
+                Button btnEditar = new Button();
+                btnEditar.Text = "Editar";
+                btnEditar.CssClass = "btnEdit";
+                btnEditar.BackColor = System.Drawing.Color.SkyBlue;
+                btnEditar.Attributes.Add("onclick", "window.open('Editar_Casa.aspx?id=" + data_reader.GetValue(0) + "')");
+                btnEditar.Style["width"] = "150px"; 
+
+                Button btnEliminar = new Button();
+                btnEliminar.Text = "Eliminar";
+                btnEliminar.CssClass = "btnDelete";
+                btnEliminar.BackColor = System.Drawing.Color.SkyBlue;
+                btnEliminar.Attributes.Add("onclick", "window.open('Eliminar_Casa.aspx?id=" + data_reader.GetValue(0) + "')");
+                btnEliminar.Style["width"] = "150px"; 
+
+                Response.Write(RenderControlAsString(btnEditar) + "<br/>");
+                Response.Write(RenderControlAsString(btnEliminar));
+
+                Response.Write("</td>");
+                Response.Write("</tr>");
+            }
+
+            Response.Write("</tbody>");
+            Response.Write("</table>");
+
+            data_reader.Close();
+            conn.Close();
+        }
+
+    private string RenderControlAsString(Control control)
+        {
+            using (System.IO.StringWriter sw = new System.IO.StringWriter())
+            {
+                using (HtmlTextWriter hw = new HtmlTextWriter(sw))
+                {
+                    control.RenderControl(hw);
+                    return sw.ToString();
+                }
+            }
+        }
+
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+
+            Response.Redirect("Index.aspx");
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR_CASA.ASPX
+
+<%@ Page Title="Editar Casa" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Editar_Casa.aspx.cs" Inherits="Atividade10_Rafael_Albuquerque.Editar_Casa" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://animetya.com/wp-content/uploads/2017/11/sky2-1024x729.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main 
+        {
+            text-align: center;
+            color: black;
+            padding: 20px;
+        }
+
+        h2 
+        {
+            color: black;
+        }
+
+        label 
+        {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: blue;
+            font-style: italic;
+        }
+
+        input, select 
+        {
+            margin: 5px 0;
+            border: 3px solid blue;
+            height: 40px;
+            width: 400px;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: greenyellow;
+            border: none;
+            cursor: pointer;
+        }
+
+        dropdownlist 
+        {
+            width: 100px;
+        }
+
+        select 
+        {
+            padding: 4px; 
+            font-size: 16px; 
+            color: blueviolet; 
+            border: 3px solid blue; 
+            background-color: white; 
+        }
+
+        select::-ms-expand
+        {
+            display: none; 
+        }
+
+        button:hover 
+        {
+            background-color: royalblue;
+        }
+        .label-container 
+        {
+        background-color: lightblue; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 3px solid blue; 
+        }
+    </style>
+
+    <main aria-labelledby="Cadastrar Aluno">
+        <div class="label-container">
+        <label for="lbl_id">ID</label>
+        <asp:TextBox ID="txt_id" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_zona">Zona</label>
+        <asp:Dropdownlist ID="dd_zona" runat="server"></asp:Dropdownlist>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_n_assoalhadas">Tipo</label>
+        <asp:DropDownList ID="dd_n_assoalhadas" runat="server"></asp:DropDownList>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_ano">Ano</label>
+        <asp:TextBox ID="txt_ano" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_preco">Preco</label>
+        <asp:TextBox ID="txt_preco" runat="server"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_cliente">Cliente</label>
+        <asp:DropDownList ID="dd_cliente" runat="server"></asp:DropDownList>
+    </div>
+
+    <br />
+
+        <br />
+        <asp:Button ID="b_inserir_click" runat="server" Text="Atualizar" OnClick="bt_inserir_Click" Height="50px" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+           transition: background-color 0.3s;"
+    onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+        <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+EDITAR_CASA.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Editar_Casa : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            string connetionString;
+            SqlConnection con;
+            connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = " ";
+            sql = "Select * from tab_cliente";
+            String x;
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(1) + "";
+                dd_cliente.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+            }
+
+            dataReader.Close();
+
+            sql = "Select * from tab_interesse";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(2) + "";
+                dd_n_assoalhadas.Items.Add(new ListItem((string)dataReader.GetValue(2), x));
+            }
+
+            dataReader.Close();
+
+            sql = "Select * from tab_interesse";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(1) + "";
+                dd_zona.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+            }
+
+            Response.Write(Output);
+            dataReader.Close();
+            con.Close();
+
+        }
+
+        protected void bt_inserir_Click(object sender, EventArgs e)
+        {
+            string connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connetionString))
+            {
+                int id_cliente = 0;
+                using (SqlCommand cmd = new SqlCommand("SELECT id FROM tab_cliente WHERE nome = @nome", con))
+                {
+                    cmd.Parameters.AddWithValue("@nome", dd_cliente.SelectedValue);
+                    con.Open();
+                    id_cliente = (int)cmd.ExecuteScalar();
+                }
+
+                string selectQuery = "SELECT COUNT(*) FROM tab_casa WHERE id_cliente = @id_cliente";
+                using (SqlCommand selectCmd = new SqlCommand(selectQuery, con))
+                {
+                    selectCmd.Parameters.AddWithValue("@id_cliente", id_cliente);
+                    int count = (int)selectCmd.ExecuteScalar();
+
+                        string updateQuery = "UPDATE tab_casa SET zona = @zona, n_assoalhadas = @n_assoalhadas, ano = @ano, preco = @preco WHERE id_cliente = @id_cliente";
+                        using (SqlCommand updateCmd = new SqlCommand(updateQuery, con))
+                        {
+                            updateCmd.Parameters.AddWithValue("@zona", dd_zona.SelectedValue);
+                            updateCmd.Parameters.AddWithValue("@n_assoalhadas", dd_n_assoalhadas.SelectedValue);
+                            updateCmd.Parameters.AddWithValue("@ano", txt_ano.Text);
+                            updateCmd.Parameters.AddWithValue("@preco", txt_preco.Text);
+                            updateCmd.Parameters.AddWithValue("@id_cliente", id_cliente);
+
+                            updateCmd.ExecuteNonQuery();
+                        }
+
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados alterados com sucesso');window.location = 'Gerir_Casas.aspx'", true);
+
+                }
+                    
+                }
+
+            }       
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+
+            Response.Redirect("Gerir_Casas.aspx");
+
+        }
+    }
+
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_CASA.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Eliminar_Casa.aspx.cs" Inherits="Atividade10_Rafael_Albuquerque.Eliminar_Casa" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <style>
+        body 
+        {
+            background-image: url('https://animetya.com/wp-content/uploads/2017/11/sky2-1024x729.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        main 
+        {
+            text-align: center;
+            color: black;
+            padding: 20px;
+        }
+
+        h2 
+        {
+            color: black;
+        }
+
+        label 
+        {
+            display: block;
+            margin: 10px 0;
+            font-size: 25px;   
+            color: blue;
+            font-style: italic;
+        }
+
+        input, select 
+        {
+            margin: 5px 0;
+            border: 3px solid blue;
+            height: 40px;
+            width: 400px;
+        }
+
+        button 
+        {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: cornflowerblue;
+            color: greenyellow;
+            border: none;
+            cursor: pointer;
+        }
+
+        dropdownlist 
+        {
+            width: 100px;
+        }
+
+        select 
+        {
+            padding: 4px; 
+            font-size: 16px; 
+            color: blueviolet; 
+            border: 3px solid blue; 
+            background-color: white; 
+        }
+
+        select::-ms-expand
+        {
+            display: none; 
+        }
+
+        button:hover 
+        {
+            background-color: royalblue;
+        }
+        .label-container 
+        {
+        background-color: lightblue; 
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        border: 3px solid blue; 
+        }
+    </style>
+
+    <main aria-labelledby="Cadastrar Aluno">
+        <div class="label-container">
+        <label for="lbl_id">ID</label>
+        <asp:TextBox ID="txt_id" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_zona">Zona</label>
+        <asp:Dropdownlist ID="dd_zona" runat="server" ReadOnly="true"></asp:Dropdownlist>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_n_assoalhadas">Tipo</label>
+        <asp:DropDownList ID="dd_n_assoalhadas" runat="server" ReadOnly="true"></asp:DropDownList>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_ano">Ano</label>
+        <asp:TextBox ID="txt_ano" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_preco">Preco</label>
+        <asp:TextBox ID="txt_preco" runat="server" ReadOnly="true"></asp:TextBox>
+    </div>
+
+    <div class="label-container">
+        <label for="lbl_cliente">Cliente</label>
+        <asp:DropDownList ID="dd_cliente" runat="server" ReadOnly="true"></asp:DropDownList>
+    </div>
+
+    <br />
+
+        <br />
+        <asp:Button ID="b_inserir_click" runat="server" Text="Remover" OnClick="bt_inserir_Click" Height="50px" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+           transition: background-color 0.3s;"
+    onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+        <asp:Button ID="b_backbutton" runat="server" Text="Voltar" Height="50px" OnClick="b_backbutton_Click" Width="200px" 
+    style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+           transition: background-color 0.3s;" 
+    onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_CASA.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Eliminar_Casa : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+
+            string alunoId = Request.QueryString["id"];
+
+            if (!string.IsNullOrEmpty(alunoId) && int.TryParse(alunoId, out int id))
+            {
+                txt_id.Text = alunoId;
+                string connetionString;
+                SqlConnection con;
+                connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+                con = new SqlConnection(connetionString);
+                con.Open();
+
+                SqlCommand command;
+                SqlDataReader dataReader;
+                String sql, Output = " ";
+                sql = "Select * from tab_cliente";
+                String x;
+                command = new SqlCommand(sql, con);
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    x = dataReader.GetValue(1) + "";
+                    dd_cliente.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+                }
+
+                dataReader.Close();
+
+                sql = "Select * from tab_interesse";
+                command = new SqlCommand(sql, con);
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    x = dataReader.GetValue(2) + "";
+                    dd_n_assoalhadas.Items.Add(new ListItem((string)dataReader.GetValue(2), x));
+                }
+
+                dataReader.Close();
+
+                sql = "Select * from tab_interesse";
+                command = new SqlCommand(sql, con);
+                dataReader = command.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    x = dataReader.GetValue(1) + "";
+                    dd_zona.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+                }
+
+                Response.Write(Output);
+                dataReader.Close();
+                con.Close();
+
+            }
+
+        }
+
+        protected void bt_inserir_Click(object sender, EventArgs e)
+        {
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+
+                SqlCommand command;
+                String sql = "";
+
+                sql = "DELETE FROM tab_casa WHERE id = @id"; // Correção aqui
+
+                command = new SqlCommand(sql, con);
+                command.Parameters.AddWithValue("@id", int.Parse(txt_id.Text)); // Adicionei um parâmetro para o ID a ser excluído
+
+                command.ExecuteNonQuery(); // Execute a exclusão diretamente no comando SQL
+
+                command.Dispose();
+                con.Close();
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Dados removidos com sucesso');window.location = 'Gerir_Casas.aspx'", true);
+            }
+
+        }
+
+        protected void b_backbutton_Click(object sender, EventArgs e)
+        {
+
+            Response.Redirect("Gerir_Casas.aspx");
+
+        }
+    }
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
