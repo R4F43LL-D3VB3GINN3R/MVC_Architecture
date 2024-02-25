@@ -2321,6 +2321,509 @@ namespace Atividade10_Rafael_Albuquerque
 
 }
 
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+GERENCIAR_VISITA.ASPX
+
+<%@ Page Title="Gerenciar Visita" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Gerenciar_Visita.aspx.cs" Inherits="Atividade10_Rafael_Albuquerque.Gerenciar_Visita" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+        <style>
+     body 
+     {
+         background-image: url('https://animetya.com/wp-content/uploads/2017/11/sky2-1024x729.png');
+         background-size: cover;
+         background-repeat: no-repeat;
+         background-attachment: fixed;
+     }
+
+     main 
+     {
+         text-align: center;
+         color: black;
+         padding: 20px;
+     }
+
+     h2 
+     {
+         color: black;
+     }
+
+     label 
+     {
+         display: block;
+         margin: 10px 0;
+         font-size: 25px;   
+         color: blue;
+         font-style: italic;
+     }
+
+     input, select 
+     {
+         margin: 5px 0;
+         border: 3px solid blue;
+         height: 40px;
+         width: 400px;
+     }
+
+     button 
+     {
+         margin-top: 10px;
+         padding: 5px 10px;
+         background-color: cornflowerblue;
+         color: greenyellow;
+         border: none;
+         cursor: pointer;
+     }
+
+     dropdownlist 
+     {
+         width: 100px;
+     }
+
+     select 
+     {
+         padding: 4px; 
+         font-size: 16px; 
+         color: blueviolet; 
+         border: 3px solid blue; 
+         background-color: white; 
+     }
+
+     select::-ms-expand
+     {
+         display: none; 
+     }
+
+     button:hover 
+     {
+         background-color: royalblue;
+     }
+     .label-container 
+     {
+     background-color: lightblue; 
+     padding: 10px;
+     border-radius: 5px;
+     margin-bottom: 20px;
+     border: 3px solid blue; 
+     }
+
+     .text-center {
+    text-align: center;
+    margin: 0 auto; /* Define as margens horizontalmente para auto, centralizando o elemento */
+    }
+ </style>
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <% Obter_dados(); %>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Agendar Visita</h3>
+                </div>
+            </div>
+
+             <div class="row">
+                 <div class="col-md-12">
+                     <h3>Data</h3>
+                 </div>
+             </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <asp:TextBox ID="txt_data" runat="server" CssClass="form-control text-center" placeholder="Posição" TextMode="Date"></asp:TextBox>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Cliente</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <asp:DropdownList ID="dd_cliente" runat="server" CssClass="form-control text-center" placeholder="Posição"></asp:DropdownList>
+                </div>
+            </div>
+
+             <div class="row">
+                 <div class="col-md-12">
+                     <h3>Imóvel</h3>
+                 </div>
+             </div>
+
+             <div class="row">
+                 <div class="col-md-6 offset-md-3">
+                     <asp:DropdownList ID="dd_zona" runat="server" CssClass="form-control text-center" placeholder="Posição"></asp:DropdownList>
+                 </div>
+             </div>
+             </div>
+
+              <asp:Button ID="b_inserir_click" runat="server" Text="Inserir" OnClick="bt_inserir_Click" Height="50px" Width="200px" 
+style="text-align: center; margin-left: auto; margin-right: auto; display: block; background-color: deepskyblue; color: black; border: 1px solid #ccc; padding: 10px; cursor: pointer; border-color: black;
+       transition: background-color 0.3s;"
+onmouseover="this.style.backgroundColor='white'" onmouseout="this.style.backgroundColor='deepskyblue'" />
+    </main>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+GERENCIAR_VISITA.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Gerenciar_Visita : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            string connetionString;
+            SqlConnection con;
+            connetionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+            con = new SqlConnection(connetionString);
+            con.Open();
+
+            SqlCommand command;
+            SqlDataReader dataReader;
+            String sql, Output = " ";
+            sql = "Select * from tab_cliente";
+            String x;
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(1) + "";
+                dd_cliente.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+            }
+
+            dataReader.Close();
+
+            sql = "Select * from tab_casa";
+            command = new SqlCommand(sql, con);
+            dataReader = command.ExecuteReader();
+
+            while (dataReader.Read())
+            {
+                x = dataReader.GetValue(1) + "";
+                dd_zona.Items.Add(new ListItem((string)dataReader.GetValue(1), x));
+            }
+
+            Response.Write(Output);
+            dataReader.Close();
+            con.Close();
+
+        }
+        protected void Obter_dados()
+        {
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                SqlCommand command = new SqlCommand("SELECT tab_visita.Id, tab_visita.data, tab_cliente.nome AS nome_cliente, tab_casa.zona FROM tab_visita INNER JOIN tab_cliente ON tab_visita.id_cliente = tab_cliente.id INNER JOIN tab_casa ON tab_visita.id_casa = tab_casa.id", conn);
+
+                SqlDataReader dataReader = command.ExecuteReader();
+
+                Response.Write("<div style='overflow-x:auto;'>");
+                Response.Write("<table class='table table-striped table-bordered table-hover'>");
+                Response.Write("<thead style='background-color: blue; color: white;' class='thead-dark'><tr>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>ID</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Data</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Cliente</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Zona</th>");
+                Response.Write("<th style='width: 15%; text-align: center; border: 3px solid black;'>Gerenciamento</th>");
+                Response.Write("</tr></thead>");
+                Response.Write("<tbody>");
+
+                while (dataReader.Read())
+                {
+                    Response.Write("<tr>");
+                    Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + dataReader.GetValue(0) + "</td>");
+                    Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + dataReader.GetDateTime(1).ToString("yyyy-MM-dd") + "</td>");
+                    Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + dataReader["nome_cliente"] + "</td>");
+                    Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'>" + dataReader["zona"] + "</td>");
+                    Response.Write("<td style='background-color: #ffffff; text-align: center; width: 15%; border: 3px solid black;'><a href='Eliminar_Visita?id=" + dataReader.GetValue(0) + "' class='btnDelete'>Eliminar</a></td>");
+                    Response.Write("</tr>");
+                }
+
+                Response.Write("</tbody></table></div>");
+
+                dataReader.Close();
+            }
+        }
+        protected void bt_inserir_Click(object sender, EventArgs e)
+        {
+
+            string data = txt_data.Text; 
+            string nomeCliente = dd_cliente.SelectedValue;
+            string zonaCasa = dd_zona.SelectedValue;
+
+            if (!string.IsNullOrEmpty(data) && !string.IsNullOrEmpty(nomeCliente) && !string.IsNullOrEmpty(zonaCasa))
+            {
+                int idCliente = ObterIdClientePorNome(nomeCliente);
+                int idCasa = ObterIdCasaPorZona(zonaCasa);
+
+                if (idCliente != -1 && idCasa != -1)
+                {
+                    string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+                    string sql = "INSERT INTO tab_visita (data, id_cliente, id_casa) VALUES (@data, @id_cliente, @id_casa)";
+
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        using (SqlCommand command = new SqlCommand(sql, connection))
+                        {
+                            command.Parameters.AddWithValue("@data", data);
+                            command.Parameters.AddWithValue("@id_cliente", idCliente);
+                            command.Parameters.AddWithValue("@id_casa", idCasa);
+
+                            connection.Open();
+                            int rowsAffected = command.ExecuteNonQuery();
+                            // Você pode adicionar aqui alguma lógica para tratar o resultado da inserção, se necessário
+                            // Você pode adicionar aqui alguma lógica para tratar o resultado da inserção, se necessário
+                        }
+                    }
+                }
+            }
+        }
 
 
+        public int ObterIdClientePorNome(string nome)
+                {
+                    int idCliente = -1;
 
+                    string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        string sql = "SELECT id FROM tab_cliente WHERE nome = @nome";
+
+                        using (SqlCommand command = new SqlCommand(sql, connection))
+                        {
+                            command.Parameters.AddWithValue("@nome", nome);
+
+                            connection.Open();
+                            object result = command.ExecuteScalar();
+
+                            if (result != null && result != DBNull.Value)
+                            {
+                                idCliente = Convert.ToInt32(result);
+                            }
+                        }
+                    }
+
+                    return idCliente;
+                }
+
+            
+        private int ObterIdCasaPorZona(string zona)
+        {
+            int idCasa = -1;
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string sql = "SELECT id FROM tab_casa WHERE zona = @zona";
+
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    command.Parameters.AddWithValue("@zona", zona);
+
+                    connection.Open();
+                    object result = command.ExecuteScalar();
+
+                    if (result != null && result != DBNull.Value)
+                    {
+                        idCasa = Convert.ToInt32(result);
+                    }
+                }
+            }
+
+            return idCasa;
+        }
+
+    }
+
+}
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_VISITA.ASPX
+
+<%@ Page Title="About" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Eliminar_Visita.aspx.cs" Inherits="Atividade10_Rafael_Albuquerque.Eliminar_Visita" %>
+
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <main aria-labelledby="title">
+        <style>
+     body 
+     {
+         background-image: url('https://animetya.com/wp-content/uploads/2017/11/sky2-1024x729.png');
+         background-size: cover;
+         background-repeat: no-repeat;
+         background-attachment: fixed;
+     }
+
+     main 
+     {
+         text-align: center;
+         color: black;
+         padding: 20px;
+     }
+
+     h2 
+     {
+         color: black;
+     }
+
+     label 
+     {
+         display: block;
+         margin: 10px 0;
+         font-size: 25px;   
+         color: blue;
+         font-style: italic;
+     }
+
+     input, select 
+     {
+         margin: 5px 0;
+         border: 3px solid blue;
+         height: 40px;
+         width: 400px;
+     }
+
+     button 
+     {
+         margin-top: 10px;
+         padding: 5px 10px;
+         background-color: cornflowerblue;
+         color: greenyellow;
+         border: none;
+         cursor: pointer;
+     }
+
+     dropdownlist 
+     {
+         width: 100px;
+     }
+
+     select 
+     {
+         padding: 4px; 
+         font-size: 16px; 
+         color: blueviolet; 
+         border: 3px solid blue; 
+         background-color: white; 
+     }
+
+     select::-ms-expand
+     {
+         display: none; 
+     }
+
+     button:hover 
+     {
+         background-color: royalblue;
+     }
+     .label-container 
+     {
+     background-color: lightblue; 
+     padding: 10px;
+     border-radius: 5px;
+     margin-bottom: 20px;
+     border: 3px solid blue; 
+     }
+
+     .text-center {
+    text-align: center;
+    margin: 0 auto; 
+    }
+ </style>
+        <div class="container">
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Confirmar Exclusão</h3>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <asp:TextBox ID="txt_id" runat="server" CssClass="form-control text-center" placeholder="Posição"></asp:TextBox>
+                </div>
+            </div>
+</asp:Content>
+
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+#----------------------------------------------------------------  
+ELIMINAR_VISITA.ASPX.CS
+
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+
+namespace Atividade10_Rafael_Albuquerque
+{
+    public partial class Eliminar_Visita : Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+            txt_id.Text = Request.QueryString["id"];
+
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\10792\\Atividade10_Rafael_Albuquerque\\Atividade10_Rafael_Albuquerque\\App_Data\\DB_Imobiliaria.mdf;Integrated Security=True";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+
+                con.Open();
+
+                SqlCommand command;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                String sql = "";
+
+                sql = "Delete tab_visita where id='" + txt_id.Text + "';";
+
+                command = new SqlCommand(sql, con);
+                adapter.DeleteCommand = new SqlCommand(sql, con);
+                adapter.DeleteCommand.ExecuteNonQuery();
+
+                command.Dispose();
+                con.Close();
+
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Dados", "alert('Visita Cancelada com Sucesso');window.location = 'Gerenciar_Visita.aspx'", true);
+
+            }
+
+        }
+    }
+}
